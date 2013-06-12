@@ -122,3 +122,6 @@ table tr.alt td a:hover{
 	background-color: #ffaaaa;
 	opacity: 1;
 }
+p.dropButtons{
+	display: inline;
+}

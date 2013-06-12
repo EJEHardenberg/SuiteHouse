@@ -29,8 +29,11 @@
 
       <section>
         <div>
-          <p>
+          <p class="dropButtons">
             <a id="incomeDropForm" >Add Income</a>
+          </p>
+          <p class="dropButtons">
+            <a id="expenseDropForm" >Add Expense</a>  
           </p>
           <div class="slide">
             <form action="/finance/checkbook" method="POST" id="incomeForm">
@@ -42,9 +45,7 @@
               <input type="submit" value="submit" />
             </form>
           </div>
-          <p>
-            <a id="expenseDropForm" >Add Expense</a>  
-          </p>
+          
           <div class="slide">
             <form action="/finance/checkbook" method="POST" id="expenseForm">
               <label for="desciption">Description</label>
@@ -59,6 +60,8 @@
         <script type="text/javascript">          
           document.getElementById('incomeDropForm').onclick = function(){
               var form = document.getElementById('incomeForm');
+              var form2 = document.getElementById('expenseForm');
+              
               //By adding this class, we trigger the css3 transition of the opacity to make it look like it fades in
               if(form.className == 'fade'){
                 form.className = ' ';
@@ -70,6 +73,9 @@
             
           document.getElementById('expenseDropForm').onclick = function(){
               var form = document.getElementById('expenseForm');
+              var form2 = document.getElementById('incomeForm');
+              
+              
               //By adding this class, we trigger the css3 transition of the opacity to make it look like it fades in
               if(form.className == 'fade'){
                 form.className = ' ';
