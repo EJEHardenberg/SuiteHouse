@@ -30,16 +30,46 @@
       <section>
         <div>
           <p>
-            Enter your items here
+            <a id="incomeDropForm" >Add Income</a>
           </p>
-          <form action="/finance/checkbook" method="POST">
-            <label for="desciption">Description</label>
-            <input type="text" name="description" />
-            <label for="amount">Amount</label>
-            <input type="number" step="0.01" min="0" name="amount" />
-            <input type="submit" value="submit" />
-          </form>
+          <div class="slide">
+            <form action="/finance/checkbook" method="POST" id="incomeForm">
+              <label for="desciption">Description</label>
+              <input type="text" name="description" />
+              <label for="amount">Amount</label>
+              <input type="number" step="0.01" min="0" name="amount" /> 
+              <input type="hidden" value="income" />
+              <input type="submit" value="submit" />
+            </form>
+          </div>
+          <p>
+            <a id="expenseDropForm" >Add Expense</a>  
+          </p>
+          <div class="slide">
+            <form action="/finance/checkbook" method="POST" id="expenseForm">
+              <label for="desciption">Description</label>
+              <input type="text" name="description" />
+              <label for="amount">Amount</label>
+              <input type="number" step="0.01" min="0" name="amount" />
+              <input type="hidden" value="expense" />
+              <input type="submit" value="submit" />
+            </form>
+          </div>
         </div>
+        <script type="text/javascript">          
+          document.getElementById('incomeDropForm').onclick = function(){
+              var form = document.getElementById('incomeForm');
+              //By adding this class, we trigger the css3 transition of the opacity to make it look like it fades in
+              form.className = 'fade';
+          };
+            
+          document.getElementById('expenseDropForm').onclick = function(){
+              var form = document.getElementById('expenseForm');
+              //By adding this class, we trigger the css3 transition of the opacity to make it look like it fades in
+              form.className = 'fade';
+          };
+
+        </script>
           
 
         <div>

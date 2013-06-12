@@ -26,7 +26,7 @@ class LandingPage(webapp2.RequestHandler):
 			#Store the user information if they don't exist already 
 
 			template_values = {
-				'username': user.user_id(),
+				'username': user.nickname(),
 			}
 			template = JINJA_ENVIRONMENT.get_template('index.html')
 			self.response.write(template.render(template_values))

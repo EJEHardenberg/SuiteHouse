@@ -84,3 +84,12 @@ table tr.alt td a:hover{
 #header{
 	text-align: right;
 }
+#incomeForm, #expenseForm{
+	opacity:0;
+	transition: opacity .5s ease-in-out;
+	-moz-transition:  opacity .5s ease-in-out;
+    -webkit-transition: opacity .5s ease-in-out;
+}
+#incomeForm.fade, #expenseForm.fade{
+  	opacity:1;
+}
