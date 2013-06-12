@@ -41,6 +41,8 @@ ul.boxes{
 	text-align: center;
 	margin: auto;
 }
+
+/*Checkbook.html */
 section{
 	margin: auto;
 	width: 100%;
@@ -98,4 +100,25 @@ table tr.alt td a:hover{
 }
 .income{
 	color: #00FF00;
+}
+#incomeDropForm,#expenseDropForm{
+	background-color: #aaaaaa;
+	text-align: center;
+	cursor: pointer;
+	opacity: .8;
+	padding: .25em;
+	padding-left: .5em;
+	padding-right: .5em;
+	border-radius: .25em;
+	transition: opacity,background-color .5s ease-in-out;
+	-moz-transition: opacity,background-color .5s ease-in-out;
+    -webkit-transition: opacity,background-color .5s ease-in-out;
+}
+#incomeDropForm:hover{
+	background-color: #aaffaa;
+	opacity: 1;	
+}
+#expenseDropForm:hover{
+	background-color: #ffaaaa;
+	opacity: 1;
 }

@@ -60,14 +60,22 @@
           document.getElementById('incomeDropForm').onclick = function(){
               var form = document.getElementById('incomeForm');
               //By adding this class, we trigger the css3 transition of the opacity to make it look like it fades in
-              form.className = 'fade';
+              if(form.className == 'fade'){
+                form.className == ' ';
+              }else{
+                form.className = 'fade';
+              }
               //I would like to make it look like it flys down from the sky or in from the left or right, but that can wait
           };
             
           document.getElementById('expenseDropForm').onclick = function(){
               var form = document.getElementById('expenseForm');
               //By adding this class, we trigger the css3 transition of the opacity to make it look like it fades in
-              form.className = 'fade';
+              if(form.className == 'fade'){
+                form.className == ' ';
+              }else{
+                form.className = 'fade';
+              }
           };
         </script>
           
