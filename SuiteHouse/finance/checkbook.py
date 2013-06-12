@@ -58,9 +58,14 @@ class CheckBook(webapp2.RequestHandler):
 		user = users.get_current_user()
 		desc = cgi.escape(self.request.get('description'))
 		amount = float(cgi.escape(self.request.get('amount')))
+		postType = self.request.get('postType');
 
+		if(postType == 'expense'):
+			#If this has come from the expense form then we negate the value
+			amount = 0 - amount
+
+		#Create the new item and store it in the database
 		newItem = CheckBookItem(description=desc,amount=amount,associated_user=str(user.nickname()))
-		logging.info(newItem)
 		newItem.put()
 
 		#redirect the user to the proper page

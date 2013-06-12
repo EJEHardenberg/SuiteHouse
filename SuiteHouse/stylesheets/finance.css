@@ -93,3 +93,9 @@ table tr.alt td a:hover{
 #incomeForm.fade, #expenseForm.fade{
   	opacity:1;
 }
+.expense{
+	color: #FF0000;
+}
+.income{
+	color: #00FF00;
+}

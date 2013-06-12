@@ -38,7 +38,7 @@
               <input type="text" name="description" />
               <label for="amount">Amount</label>
               <input type="number" step="0.01" min="0" name="amount" /> 
-              <input type="hidden" value="income" />
+              <input type="hidden" name="postType" value="income" />
               <input type="submit" value="submit" />
             </form>
           </div>
@@ -51,7 +51,7 @@
               <input type="text" name="description" />
               <label for="amount">Amount</label>
               <input type="number" step="0.01" min="0" name="amount" />
-              <input type="hidden" value="expense" />
+              <input type="hidden" name="postType" value="expense" />
               <input type="submit" value="submit" />
             </form>
           </div>
@@ -61,6 +61,7 @@
               var form = document.getElementById('incomeForm');
               //By adding this class, we trigger the css3 transition of the opacity to make it look like it fades in
               form.className = 'fade';
+              //I would like to make it look like it flys down from the sky or in from the left or right, but that can wait
           };
             
           document.getElementById('expenseDropForm').onclick = function(){
@@ -68,7 +69,6 @@
               //By adding this class, we trigger the css3 transition of the opacity to make it look like it fades in
               form.className = 'fade';
           };
-
         </script>
           
 
@@ -87,7 +87,11 @@
               <!-- ref for updating information using key-->
               <tr class="{{ loop.cycle('alt', '') }}" ref="{{item.key()}}">
                 <td>{{item.description}}</td>
-                <td>{{item.amount}}</td>
+                {% if item.amount < 0 %}
+                  <td class="expense">{{item.amount}}</td>
+                {% else %}
+                  <td class="income">{{item.amount}}</td>
+                {% endif %}
                 <td>{{item.date}}</td>
                 <td ><a class="deleteButton" ref="{{item.key()}}">Delete</a></td>
               </tr>
