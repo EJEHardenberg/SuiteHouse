@@ -64,9 +64,11 @@
               
               //By adding this class, we trigger the css3 transition of the opacity to make it look like it fades in
               if(form.className == 'fade'){
-                form.className = ' ';
+                form.className = 'unfade';
+                form2.className = 'unfade';
               }else{
                 form.className = 'fade';
+                form2.className = 'unfade';
               }
               //I would like to make it look like it flys down from the sky or in from the left or right, but that can wait
           };
@@ -78,9 +80,11 @@
               
               //By adding this class, we trigger the css3 transition of the opacity to make it look like it fades in
               if(form.className == 'fade'){
-                form.className = ' ';
+                form.className = 'unfade';
+                form2.className = 'unfade';
               }else{
                 form.className = 'fade';
+                form2.className = 'unfade';
               }
           };
         </script>

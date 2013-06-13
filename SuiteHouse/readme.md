@@ -19,7 +19,7 @@ Setup
 - Setup your PATH variables to include the dev_appserver.py file (follow Google's online instructions)
 - Run dev_appserver.py --port=XXX SuiteHouse/
 - ???
-- Profit b
+- Profit
 
 
 Developers:
