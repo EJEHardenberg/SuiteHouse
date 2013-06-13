@@ -70,8 +70,8 @@
               }else{
                 form.className = 'fade';
                 form2.className = 'unfade';
-                divs[0].style.zIndex = 1;
-                divs[1].style.zIndex = 0;
+                form.parentNode.style.zIndex = 1;
+                form2.parentNode.style.zIndex = 0;
               }
               //I would like to make it look like it flys down from the sky or in from the left or right, but that can wait
           };
@@ -89,8 +89,8 @@
               }else{
                 form.className = 'fade';
                 form2.className = 'unfade';
-                divs[1].style.zIndex = 1;
-                divs[0].style.zIndex = 0;
+                form.parentNode.style.zIndex = 1;
+                form2.parentNode.style.zIndex = 0;
               }
           };
         </script>
