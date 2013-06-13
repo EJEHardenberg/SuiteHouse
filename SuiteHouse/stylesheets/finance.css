@@ -50,6 +50,7 @@ section{
 }
 table{
 	margin: auto;
+	margin-top: 2em;
 	width: 100%;
 }
 table tr{
@@ -136,4 +137,15 @@ p.dropButtons{
 /*Don't give the right hand side p any margin otherwise the whole thing won't be centered*/
 p.dropButtons + p.dropButtons{
 	margin-right: 0;
+}
+.slide{
+	margin: auto;
+	position: absolute;
+	left: 30%;
+}
+.slide > #incomeForm{
+	background-color: #aaffaa;
+}
+.slide > #expenseForm{
+	background-color: #ffaaaa;
 }
