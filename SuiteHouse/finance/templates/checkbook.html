@@ -61,6 +61,7 @@
           document.getElementById('incomeDropForm').onclick = function(){
               var form = document.getElementById('incomeForm');
               var form2 = document.getElementById('expenseForm');
+              var divs = document.getElementsByClassName('slide');
               
               //By adding this class, we trigger the css3 transition of the opacity to make it look like it fades in
               if(form.className == 'fade'){
@@ -69,6 +70,8 @@
               }else{
                 form.className = 'fade';
                 form2.className = 'unfade';
+                divs[0].style.zIndex = 1;
+                divs[1].style.zIndex = 0;
               }
               //I would like to make it look like it flys down from the sky or in from the left or right, but that can wait
           };
@@ -76,6 +79,7 @@
           document.getElementById('expenseDropForm').onclick = function(){
               var form = document.getElementById('expenseForm');
               var form2 = document.getElementById('incomeForm');
+              var divs = document.getElementsByClassName('slide');
               
               
               //By adding this class, we trigger the css3 transition of the opacity to make it look like it fades in
@@ -85,6 +89,8 @@
               }else{
                 form.className = 'fade';
                 form2.className = 'unfade';
+                divs[1].style.zIndex = 1;
+                divs[0].style.zIndex = 0;
               }
           };
         </script>
