@@ -37,6 +37,39 @@ import logging
 
 class CheckBook(webapp2.RequestHandler):
 
+	@staticmethod
+	def getTotalIncomeAnnExpense():
+		"""Returns the total income and total expenses from the checkbook in a key value pair
+			{'income' : x , 'expense' : y} 
+		"""
+
+		user = users.get_current_user()
+
+		if user:
+			#Get all the items associated with the user
+			checkbook = CheckBookItem.by_id(user.nickname())
+
+			#aggregate data
+			runningIncome = 0
+			runningExpense = 0
+
+			for item in checkbook:
+				if item.amount < 0:
+					runningExpense = runningExpense + item.amount
+				else:
+					runningIncome = runningIncome + item.amount
+
+			return {'income' : runningIncome, 'expense' : runningExpense}
+
+
+		else:
+			self.redirect(users.create_login_url(self.request.uri))
+
+
+
+		
+
+
 	def get(self):
 		user = users.get_current_user()
 
