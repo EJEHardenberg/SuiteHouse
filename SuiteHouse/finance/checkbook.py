@@ -80,7 +80,8 @@ class CheckBook(webapp2.RequestHandler):
 
 			template_values = {
 				'username': user.nickname(),
-				'items' : checkbook			
+				'items' : checkbook,
+				'error' : self.request.get('err'),
 			}
 
 			template = JINJA_ENVIRONMENT.get_template('checkbook.html')
@@ -104,7 +105,7 @@ class CheckBook(webapp2.RequestHandler):
 			#Redirects here don't work for some reason
 			self.response.set_status(400,'Bad amount value')
 			self.response.write(err)
-			self.redirect('http://www.google.com')
+			self.redirect('/finance/checkbook?err=%s' % cgi.escape(err))
 
 		postType = self.request.get('postType');
 

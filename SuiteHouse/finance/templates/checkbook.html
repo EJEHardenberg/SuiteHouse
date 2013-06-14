@@ -27,6 +27,12 @@
         </div>
       </section>
 
+      {% if error %}
+      <section>
+        <div><h4>There was a problem on the page: {{error}}</h4></div>
+      </section>
+      {% endif %}
+
       <section>
         <div>
           <p class="dropButtons">
