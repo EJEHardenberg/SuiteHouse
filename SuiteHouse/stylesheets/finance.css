@@ -106,9 +106,11 @@ table tr.alt td a:hover{
 }
 .expense{
 	color: #FF0000;
+	text-shadow: black 0.1em 0.1em 0.1em;
 }
 .income{
 	color: #00FF00;
+	text-shadow: black 0.1em 0.1em 0.1em;
 }
 #incomeDropForm,#expenseDropForm{
 	background-color: #aaaaaa;

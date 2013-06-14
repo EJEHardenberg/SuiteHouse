@@ -101,6 +101,8 @@ class CheckBook(webapp2.RequestHandler):
 			err = "Please enter an amount for your item"
 			amount = 0
 			#Redirects here don't work for some reason
+			self.response.set_status(400,'Bad amount value')
+			self.response.write(err)
 
 
 		postType = self.request.get('postType');

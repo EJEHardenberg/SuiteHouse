@@ -131,7 +131,7 @@
         for (var i = buttons.length - 1; i >= 0; i--) {
           buttons[i].onclick = function(){
             //Confirm:
-            //if(confirm('Are you sure you want to remove this item? -- This cannot be undone --')){
+            if(confirm('Are you sure you want to remove this item? -- This cannot be undone --')){
               var button = this;
               
               var xmlHttp = new XMLHttpRequest();
@@ -148,8 +148,26 @@
               data.append('key',this.attributes.ref.nodeValue);
 
               xmlHttp.send(JSON.stringify({'key' : this.attributes.ref.nodeValue}));
-            //}
+            }
           };
+        };
+
+        function editDescription(tr){
+          console.log(tr);
+          
+        }
+        function editAmount(tr){
+          console.log(tr);
+        }
+
+        //Bind the description and the amount td tags of each row to have bindings to make them editable
+        var trs = document.getElementsByTagName('tbody')[0].children;
+        for (var i = trs.length - 1; i >= 0; i--) {
+          //Pass the TR we're in to it so we'll have that property available for us
+          trs[i].children[0].onclick = function(){  
+            editDescription(i);
+          };
+          trs[i].children[1].onclick = function(){editAmount(trs[i]);};
         };
         
       </script>

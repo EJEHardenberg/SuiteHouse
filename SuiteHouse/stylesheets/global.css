@@ -4,6 +4,7 @@ html{
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size: 12pt;
 	padding-bottom: 1em;
+	/*text-shadow: black 0.1em 0.1em 0.1em; */
 }
 #sidebar{
 	width: 20%;
