@@ -14,6 +14,12 @@ import os
 import json
 import cgi
 
+#Import logging library
+import logging
+
+#Import time library
+import time
+
 #Make sure to setup the template rendering evironment in the templates directory
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__) + '/templates/'),
@@ -65,11 +71,6 @@ class CheckBook(webapp2.RequestHandler):
 		else:
 			self.redirect(users.create_login_url(self.request.uri))
 
-
-
-		
-
-
 	def get(self):
 		user = users.get_current_user()
 
@@ -103,7 +104,7 @@ class CheckBook(webapp2.RequestHandler):
 			#Redirects here don't work for some reason
 			self.response.set_status(400,'Bad amount value')
 			self.response.write(err)
-
+			self.redirect('http://www.google.com')
 
 		postType = self.request.get('postType');
 
@@ -116,10 +117,9 @@ class CheckBook(webapp2.RequestHandler):
 		if err == "":
 			newItem = CheckBookItem(description=desc,amount=amount,associated_user=str(user.nickname()))
 			newItem.put()
-
-		#redirect the user to the proper page
-		self.redirect('/finance/checkbook') #Probably want to pass some parameters to the url about success or not sucesss
-		self.get()
+			time.sleep(1) # this is so that when we do the redirect (to essentially refresh the page), we ensure the datastore has been updated and we see a new value
+			# we should redirect the user here, otherwise we ham up the redirects
+			self.redirect('/finance/checkbook') #Probably want to pass some parameters to the url about success or not sucesss
 
 	def delete(self):
 		"""Respond to an http delete request, this will delete whatever CheckBookItem the request specifies"""
