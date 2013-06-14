@@ -100,6 +100,7 @@ class CheckBook(webapp2.RequestHandler):
 			#They didn't submit a numeric integer (aka they just hit submit without entering a value)
 			err = "Please enter an amount for your item"
 			amount = 0
+			#Redirects here don't work for some reason
 
 
 		postType = self.request.get('postType');

@@ -19,8 +19,28 @@
         <h1><span>P&amp;E</span>Suite House</h1>   	
         <span class="loggedIn">You are logged in as {{username}} <br/><a href="/" style="display:inline;">Return to main menu</a></span>
       </header>
-      	
+        
         <div class="centerMe">
+          <div>
+            <table id="infoTable">
+              <thead>
+                <tr>
+                  <th colspan="2">Your Finances</th>
+                </tr>
+                <tr class="alt">
+                  <th>Total Expenses</th>
+                  <th>Total Income</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="expense">{{cbExpense}}</td>
+                  <td class="income">{{cbIncome}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
           <ul class="boxes">
           	<li>
           		<h3><a href="/finance/wishlist" >Wish List</a></h3>

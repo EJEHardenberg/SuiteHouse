@@ -22,8 +22,12 @@ class FinancePage(webapp2.RequestHandler):
 		if not user:
 			self.redirect(users.create_login_url(self.request.uri))
 
+		checkBookInfo = checkbook.CheckBook.getTotalIncomeAnnExpense()
+
 		template_values = {
 			'username': user.nickname(),
+			'cbIncome' : checkBookInfo['income'],
+			'cbExpense' : checkBookInfo['expense'],
 		}
 
 		template = JINJA_ENVIRONMENT.get_template('index.html')

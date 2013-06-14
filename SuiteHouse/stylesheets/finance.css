@@ -41,7 +41,12 @@ ul.boxes{
 	text-align: center;
 	margin: auto;
 }
-
+#infoTable{
+	width: auto;
+}
+#infoTable thead tr, #infoTable tbody tr{
+	text-align: center;	
+}
 /*Checkbook.html */
 section{
 	margin: auto;
