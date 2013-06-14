@@ -121,12 +121,12 @@ table tr.alt td a:hover{
 }
 #incomeDropForm{background-color: #aaffaa;}
 #incomeDropForm:hover{
-	background-color: #aaaaaa;
+	background-color: #00ff00;
 	opacity: 1;	
 }
 #expenseDropForm{background-color: #ffaaaa;}
 #expenseDropForm:hover{
-	background-color: #aaaaaa;
+	background-color: #ff0000;
 	opacity: 1;
 }
 p.dropButtons{
@@ -145,8 +145,8 @@ p.dropButtons + p.dropButtons{
 	left: 30%;
 }
 .slide > #incomeForm{
-	background-color: #aaffaa;
+	background-color: #00ff00;
 }
 .slide > #expenseForm{
-	background-color: #ffaaaa;
+	background-color: #ff0000;
 }
