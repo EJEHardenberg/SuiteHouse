@@ -63,7 +63,7 @@ table tr:hover{
 }
 table tr.alt{
 	text-align: left;
-	background-color: #aaaaaa;
+	background-color: #abcdef;
 }
 table tr td a{
 	text-align: center;
@@ -148,5 +148,5 @@ p.dropButtons + p.dropButtons{
 	background-color: #00ff00;
 }
 .slide > #expenseForm{
-	background-color: #ff0000;
+	background-color: #ff0000 ;
 }

@@ -90,20 +90,33 @@ class CheckBook(webapp2.RequestHandler):
 	def post(self):
 		user = users.get_current_user()
 		desc = cgi.escape(self.request.get('description'))
-		amount = float(cgi.escape(self.request.get('amount')))
+
+		amount = cgi.escape(self.request.get('amount'))
+		err = ""
+		
+		try:
+			amount = float(amount)
+		except Exception, e:
+			#They didn't submit a numeric integer (aka they just hit submit without entering a value)
+			err = "Please enter an amount for your item"
+			amount = 0
+
+
 		postType = self.request.get('postType');
 
 		if(postType == 'expense'):
 			#If this has come from the expense form then we negate the value
 			amount = 0 - amount
+			
 
 		#Create the new item and store it in the database
-		newItem = CheckBookItem(description=desc,amount=amount,associated_user=str(user.nickname()))
-		newItem.put()
+		if err == "":
+			newItem = CheckBookItem(description=desc,amount=amount,associated_user=str(user.nickname()))
+			newItem.put()
 
 		#redirect the user to the proper page
-
 		self.redirect('/finance/checkbook') #Probably want to pass some parameters to the url about success or not sucesss
+		self.get()
 
 	def delete(self):
 		"""Respond to an http delete request, this will delete whatever CheckBookItem the request specifies"""
@@ -112,10 +125,17 @@ class CheckBook(webapp2.RequestHandler):
 		body = json.loads((self.request.body))
 		key = body['key']
 
-		item = db.get(db.Key(encoded=str(key)))
-		item.delete()
-		self.response.set_status(200,json.dumps({'key' : key}))
-		self.response.write(key)
+		try:
+			item = db.get(db.Key(encoded=str(key)))
+			item.delete()
+			self.response.set_status(200,json.dumps({'key' : key}))
+			self.response.write(key)
+		except Exception, e:
+			self.response.set_status(404,json.dumps({'key' : 'Not found'}))
+		else:
+			#Carry on my wayward son
+			pass
+		
 		
 
 
