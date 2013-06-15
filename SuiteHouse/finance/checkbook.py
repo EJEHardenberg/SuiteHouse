@@ -19,6 +19,7 @@ import logging
 
 #Import time library
 import time
+import datetime
 
 #Make sure to setup the template rendering evironment in the templates directory
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -38,6 +39,11 @@ class CheckBookItem(db.Model):
 		c = CheckBookItem.all().filter('associated_user =',uid)
 		return c
 
+	@classmethod
+	def by_id_forMonth(cls,uid):
+		month = datetime.datetime.today().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+		c = CheckBookItem.all().filter('associated_user =',uid).filter('date >= ',month)
+
 
 import logging
 
@@ -53,7 +59,7 @@ class CheckBook(webapp2.RequestHandler):
 
 		if user:
 			#Get all the items associated with the user
-			checkbook = CheckBookItem.by_id(user.nickname())
+			checkbook = CheckBookItem.by_id_forMonth(user.nickname())
 
 			#aggregate data
 			runningIncome = 0
