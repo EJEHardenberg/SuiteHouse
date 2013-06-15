@@ -43,6 +43,7 @@ class CheckBookItem(db.Model):
 	def by_id_forMonth(cls,uid):
 		month = datetime.datetime.today().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
 		c = CheckBookItem.all().filter('associated_user =',uid).filter('date >= ',month)
+		return c
 
 
 import logging
@@ -50,7 +51,7 @@ import logging
 class CheckBook(webapp2.RequestHandler):
 
 	@staticmethod
-	def getTotalIncomeAnnExpense():
+	def getTotalIncomeAndExpense():
 		"""Returns the total income and total expenses from the checkbook in a key value pair
 			{'income' : x , 'expense' : y} 
 		"""

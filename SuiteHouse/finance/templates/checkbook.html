@@ -208,6 +208,8 @@
           }else{
             //Create input node with value in it
             var input = document.createElement('input');
+            input.type="number";
+            input.step="0.01";
             var amount = td.textContent;
             input.value   = amount;
             td.textContent = 'Press enter to submit';
