@@ -137,8 +137,43 @@ class CheckBook(webapp2.RequestHandler):
 		except Exception, e:
 			self.response.set_status(404,json.dumps({'key' : 'Not found'}))
 		else:
-			#Carry on my wayward son
+			#Carry on my wayward (son
 			pass
+			
+	def put(self):
+		body = json.loads(self.request.body)
+		key = body['key']
+
+		amount = None
+		description = None
+
+		try:
+			amount = body['amount']
+		except Exception, e:
+			#no amount to have
+			pass
+
+		try:
+			description = body['description']
+		except Exception, e:
+			#no description to have
+			pass
+
+		#Did they submit something worthwhile?
+		if amount or description:
+			try:
+				item = db.get(db.Key(encoded=str(key)))
+				if amount:
+					item.amount = float(amount)
+				if description:
+					item.description = description
+				item.put()
+				self.response.set_status(200,json.dumps({'key' : key}))
+				self.response.write(key)
+			except Exception, e:
+
+				raise e
+
 		
 		
 

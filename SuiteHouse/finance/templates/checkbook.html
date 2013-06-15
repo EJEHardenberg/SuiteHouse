@@ -148,32 +148,67 @@
                   var tr = button.parentNode;
                   tr.parentNode.remove(tr); 
                 }
-              }
+              };
               xmlHttp.open('DELETE','/finance/checkbook',true);
-              var data = new FormData();
-              data.append('key',this.attributes.ref.nodeValue);
-
               xmlHttp.send(JSON.stringify({'key' : this.attributes.ref.nodeValue}));
             }
           };
         };
 
-        function editDescription(tr){
-          console.log(tr);
+        function editDescription(td){
+          //We must change the td's inner to have an input tag
+          
+          if(td.hasInput && typeof td.hasInput != "undefined"){
+            //Then something happens
+            var desc = td.children[0].value;
+            td.innerHTML = '';
+            td.textContent = desc;
+            td.hasInput = false;
+          }else{
+            //Create input node with value in it
+            var input = document.createElement('input');
+            var desc = td.textContent;
+            input.value   = desc;
+            td.textContent = 'Press enter to submit';
+            td.appendChild(input);
+
+            //Submit on enter
+            input.onkeypress = function(e){
+              //Submit the row to the put function to update
+              if(e.keyCode === 13){
+                //On enter key submit ajax
+                var xmlHttp = new XMLHttpRequest();
+                var input = this;
+                xmlHttp.onreadystatechange = function(xmlHttp){
+                  if(this.readyState == 4 && this.status == 200){
+                    var desc = td.children[0].value;
+                    td.innerHTML = '';
+                    td.textContent = desc;
+                    td.hasInput = false;    
+                  }
+                }; 
+                xmlHttp.open('PUT', '/finance/checkbook',true);
+                var key = input.parentNode.parentNode.attributes.ref.nodeValue;
+                xmlHttp.send(JSON.stringify({'key' : key, 'description' : input.value}));
+              }
+            }
+
+
+            input.focus();
+            td.hasInput = true;
+          }
           
         }
-        function editAmount(tr){
-          console.log(tr);
+        function editAmount(td){
+          
         }
 
         //Bind the description and the amount td tags of each row to have bindings to make them editable
         var trs = document.getElementsByTagName('tbody')[0].children;
         for (var i = trs.length - 1; i >= 0; i--) {
-          //Pass the TR we're in to it so we'll have that property available for us
-          trs[i].children[0].onclick = function(){  
-            editDescription(i);
-          };
-          trs[i].children[1].onclick = function(){editAmount(trs[i]);};
+          //Pass the cell in so we can get to the whole row through the parentNode
+          trs[i].children[0].onclick = function(){ editDescription(this);};
+          trs[i].children[1].onclick = function(){ editAmount(this);};
         };
         
       </script>
