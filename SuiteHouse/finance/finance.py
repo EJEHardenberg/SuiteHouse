@@ -8,6 +8,7 @@ import jinja2
 import os
 
 import checkbook
+import billTracker
 
 #Make sure to setup the template rendering evironment in the templates directory
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -22,7 +23,7 @@ class FinancePage(webapp2.RequestHandler):
 		if not user:
 			self.redirect(users.create_login_url(self.request.uri))
 
-		checkBookInfo = checkbook.CheckBook.getTotalIncomeAnnExpense()
+		checkBookInfo = checkbook.CheckBook.getTotalIncomeAndExpense()
 
 		template_values = {
 			'username': user.nickname(),
@@ -39,4 +40,6 @@ application = webapp2.WSGIApplication([
     ('/finance/',FinancePage),
     ('/finance/checkbook',checkbook.CheckBook),
     ('/finance/checkbook/',checkbook.CheckBook),
+    ('/finance/billTracker',billTracker.BillTracker),
+    ('/finance/billTracker/',billTracker.BillTracker),
 ], debug=True)

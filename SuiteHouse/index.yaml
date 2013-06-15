@@ -16,3 +16,8 @@ indexes:
   - name: amount
   - name: date
   - name: description
+
+- kind: CheckBookItem
+  properties:
+  - name: associated_user
+  - name: date
