@@ -35,6 +35,34 @@
 
       
       <section>
+        <p>
+          Add fixed expenses like Rent, Water, and Heat here. This information will be fed to the Budgeteer to help you create a great budget!
+        </p>
+        <div>
+          <p class="dropButtons">
+            <a id="billDropForm" >Add Bill</a>  
+          </p>
+          <div class="slide">
+            <form action="/finance/billTracker" method="POST" id="billForm">
+              <label for="desciption">Description</label>
+              <input type="text" name="description" />
+              <label for="amount">Amount</label>
+              <input type="number" step="0.01" min="0" name="amount" /> 
+              <input type="submit" value="submit" />
+            </form>
+          </div>
+          <script type="text/javascript">                     
+          document.getElementById('billDropForm').onclick = function(){
+              var form = document.getElementById('billForm');         
+              //By adding this class, we trigger the css3 transition of the opacity to make it look like it fades in
+              if(form.className == 'fade'){
+                form.className = 'unfade';
+              }else{  
+                form.className = 'fade';
+              }
+          };
+        </script>
+
         <div>
           <table>
             <thead>
@@ -50,11 +78,7 @@
               <!-- ref for updating information using key-->
               <tr class="{{ loop.cycle('alt', '') }}" ref="{{item.key()}}">
                 <td>{{item.description}}</td>
-                {% if item.amount < 0 %}
-                  <td class="expense">{{item.amount}}</td>
-                {% else %}
-                  <td class="income">{{item.amount}}</td>
-                {% endif %}
+                <td class="expense">{{item.amount}}</td>
                 <td>{{item.date}}</td>
                 <td ><a class="deleteButton" ref="{{item.key()}}">Delete</a></td>
               </tr>

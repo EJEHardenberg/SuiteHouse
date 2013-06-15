@@ -92,13 +92,13 @@ table tr.alt td a:hover{
 #header{
 	text-align: right;
 }
-#incomeForm, #expenseForm{
+#incomeForm, #expenseForm, #billForm{
 	opacity:0;
 	transition: opacity .5s ease-in-out;
 	-moz-transition:  opacity .5s ease-in-out;
     -webkit-transition: opacity .5s ease-in-out;
 }
-#incomeForm.fade, #expenseForm.fade{
+#incomeForm.fade, #expenseForm.fade, #billForm.fade{
   	opacity:1;
 }
 .unfade{
@@ -112,7 +112,7 @@ table tr.alt td a:hover{
 	color: #00FF00;
 	text-shadow: black 0.1em 0.1em 0.1em;
 }
-#incomeDropForm,#expenseDropForm{
+#incomeDropForm,#expenseDropForm,#billDropForm{
 	background-color: #aaaaaa;
 	text-align: center;
 	cursor: pointer;
@@ -131,8 +131,8 @@ table tr.alt td a:hover{
 	background-color: #00ff00;
 	opacity: 1;	
 }
-#expenseDropForm{background-color: #ffaaaa;}
-#expenseDropForm:hover{
+#expenseDropForm,#billDropForm{background-color: #ffaaaa;}
+#expenseDropForm:hover,#billDropForm:hover{
 	background-color: #ff0000;
 	opacity: 1;
 }
@@ -154,6 +154,6 @@ p.dropButtons + p.dropButtons{
 .slide > #incomeForm{
 	background-color: #00ff00;
 }
-.slide > #expenseForm{
+.slide > #expenseForm,.slide > #billForm{
 	background-color: #ff0000 ;
 }
