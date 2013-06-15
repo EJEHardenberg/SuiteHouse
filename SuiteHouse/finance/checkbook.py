@@ -21,18 +21,16 @@ import logging
 import time
 import datetime
 
+import baseItem
+
 #Make sure to setup the template rendering evironment in the templates directory
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__) + '/templates/'),
     extensions=['jinja2.ext.autoescape'],autoescape=True)
 
 
-class CheckBookItem(db.Model):
+class CheckBookItem(baseItem.BaseItem,db.Model):
 	"""Model of a checkbook item"""
-	description = db.StringProperty(indexed=False)
-	date = db.DateProperty(auto_now_add=True)
-	amount = db.FloatProperty(required=True)
-	associated_user = db.StringProperty(required=True) #user_id of user
 
 	@classmethod
 	def by_id(cls,uid):
