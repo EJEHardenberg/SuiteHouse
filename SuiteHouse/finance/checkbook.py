@@ -171,8 +171,9 @@ class CheckBook(webapp2.RequestHandler):
 				self.response.set_status(200,json.dumps({'key' : key}))
 				self.response.write(key)
 			except Exception, e:
-
-				raise e
+				logging.info(e)
+				self.response.set_status(500,json.dumps({'error' : str(e)}))
+				self.response.write('Could not complete update')
 
 		
 		

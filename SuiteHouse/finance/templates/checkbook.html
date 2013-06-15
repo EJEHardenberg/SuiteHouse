@@ -157,7 +157,6 @@
 
         function editDescription(td){
           //We must change the td's inner to have an input tag
-          
           if(td.hasInput && typeof td.hasInput != "undefined"){
             //Then something happens
             var desc = td.children[0].value;
@@ -197,11 +196,51 @@
             input.focus();
             td.hasInput = true;
           }
-          
         }
+
         function editAmount(td){
-          
+          if(td.hasInput && typeof td.hasInput != "undefined"){
+            //Then something happens
+            var amount = td.children[0].value;
+            td.innerHTML = '';
+            td.textContent = amount;
+            td.hasInput = false;
+          }else{
+            //Create input node with value in it
+            var input = document.createElement('input');
+            var amount = td.textContent;
+            input.value   = amount;
+            td.textContent = 'Press enter to submit';
+            td.appendChild(input);
+
+            //Submit on enter
+            input.onkeypress = function(e){
+              //Submit the row to the put function to update
+              if(e.keyCode === 13){
+                //On enter key submit ajax
+                var xmlHttp = new XMLHttpRequest();
+                var input = this;
+                xmlHttp.onreadystatechange = function(xmlHttp){
+                  if(this.readyState == 4 && this.status == 200){
+                    var amount = td.children[0].value;
+                    td.innerHTML = '';
+                    td.textContent = amount;
+                    td.hasInput = false;    
+                  }
+                }; 
+                xmlHttp.open('PUT', '/finance/checkbook',true);
+                var key = input.parentNode.parentNode.attributes.ref.nodeValue;
+                xmlHttp.send(JSON.stringify({'key' : key, 'amount' : input.value}));
+              }
+            }
+
+
+            input.focus();
+            td.hasInput = true;
+          } 
         }
+          
+        
 
         //Bind the description and the amount td tags of each row to have bindings to make them editable
         var trs = document.getElementsByTagName('tbody')[0].children;
