@@ -19,10 +19,38 @@
       <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
       <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
       <script>
+        // $(function() {
+        //   $( ".datepicker" ).datepicker({ dateFormat: "yy-mm-dd"});
+        // });
         $(function() {
-          $( ".datepicker" ).datepicker({ dateFormat: "yy-mm-dd" });
+          $(".datepicker").datepicker({
+            dateFormat: "yy-mm-dd",
+            onSelect: function(date, instance) {
+
+              var xmlHttp = new XMLHttpRequest();
+              var input = this;
+              console.log(input);
+              xmlHttp.onreadystatechange = function(xmlHttp){
+                if(this.readyState == 4 && this.status == 200){
+                  // var desc = td.children[0].value;
+                  // td.innerHTML = '';
+                  // td.textContent = desc;
+                  // td.hasInput = false;    
+                }//endif
+              }; //end readystatechange
+
+              // send it over
+              console.log(key);
+              console.log(input.value);
+              
+              xmlHttp.open('PUT', '/finance/checkbook',true);
+              var key = input.parentNode.parentNode.attributes.ref.nodeValue;
+              xmlHttp.send(JSON.stringify({'key' : key, 'description' : input.value}));
+
+            } //end onselect
+          });//end datepicker
         });
-      </script>
+        </script>
       <style type="text/css">
         .ui-state-default{width:75%;} /*fix issue with the width of the backgrounds behind each date*/
       </style>
@@ -205,7 +233,6 @@
               }
             }
 
-
             input.focus();
             td.hasInput = true;
           }
@@ -254,19 +281,13 @@
             td.hasInput = true;
           } 
         } // end editAmount
-          
-        function editDate(td){
-          // console.log("derp");
-          
-        } // end editDate
 
-        //Bind the description, date and the amount td tags of each row to have bindings to make them editable
+        //Bind the description and the amount td tags of each row to have bindings to make them editable
         var trs = document.getElementsByTagName('tbody')[0].children;
         for (var i = trs.length - 1; i >= 0; i--) {
           //Pass the cell in so we can get to the whole row through the parentNode
           trs[i].children[0].onclick = function(){ editDescription(this);};
           trs[i].children[1].onclick = function(){ editAmount(this);};
-          // trs[i].children[2].onclick = function(){ editDate(this);};
         };
         
       </script>
