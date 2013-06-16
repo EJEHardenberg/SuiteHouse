@@ -12,7 +12,48 @@
       ga('create', 'UA-41596225-1', 'suite-house.appspot.com');
       ga('send', 'pageview');
       </script> -->
+
       <link rel="stylesheet" href="/stylesheets/finance.css" type="text/css">
+      <!-- this is the calendar formatting -->
+      <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+      <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+      <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+      <script>
+        // $(function() {
+        //   $( ".datepicker" ).datepicker({ dateFormat: "yy-mm-dd"});
+        // });
+        $(function() {
+          $(".datepicker").datepicker({
+            dateFormat: "yy-mm-dd",
+            onSelect: function(date, instance) {
+
+              var xmlHttp = new XMLHttpRequest();
+              var input = this;
+              console.log(input);
+              xmlHttp.onreadystatechange = function(xmlHttp){
+                if(this.readyState == 4 && this.status == 200){
+                  // var desc = td.children[0].value;
+                  // td.innerHTML = '';
+                  // td.textContent = desc;
+                  // td.hasInput = false;    
+                }//endif
+              }; //end readystatechange
+
+              // send it over
+              console.log(key);
+              console.log(input.value);
+              
+              xmlHttp.open('PUT', '/finance/checkbook',true);
+              var key = input.parentNode.parentNode.attributes.ref.nodeValue;
+              xmlHttp.send(JSON.stringify({'key' : key, 'description' : input.value}));
+
+            } //end onselect
+          });//end datepicker
+        });
+        </script>
+      <style type="text/css">
+        .ui-state-default{width:75%;} /*fix issue with the width of the backgrounds behind each date*/
+      </style>
   </head>
   <body>
       <header>
@@ -41,6 +82,7 @@
           <p class="dropButtons">
             <a id="expenseDropForm" >Add Expense</a>  
           </p>
+
           <div class="slide">
             <form action="/finance/checkbook" method="POST" id="incomeForm">
               <label for="desciption">Description</label>
@@ -120,7 +162,8 @@
                 {% else %}
                   <td class="income">{{item.amount}}</td>
                 {% endif %}
-                <td>{{item.date}}</td>
+                <!-- <td>{{item.date}}</td> --> <!-- DATE HERE -->
+                <td><input type="text" class="datepicker" value="{{item.date}}" readonly/></td>
                 <td ><a class="deleteButton" ref="{{item.key()}}">Delete</a></td>
               </tr>
               {% endfor %}
@@ -190,11 +233,10 @@
               }
             }
 
-
             input.focus();
             td.hasInput = true;
           }
-        }
+        } // end editDescription
 
         function editAmount(td){
           if(td.hasInput && typeof td.hasInput != "undefined"){
@@ -238,9 +280,7 @@
             input.focus();
             td.hasInput = true;
           } 
-        }
-          
-        
+        } // end editAmount
 
         //Bind the description and the amount td tags of each row to have bindings to make them editable
         var trs = document.getElementsByTagName('tbody')[0].children;
