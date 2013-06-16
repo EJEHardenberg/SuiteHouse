@@ -32,6 +32,7 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 
 class CheckBookItem(baseItem.BaseItem,db.Model):
 	"""Model of a checkbook item"""
+	date = db.DateProperty(auto_now_add=True)
 
 	@classmethod
 	def by_id(cls,uid):
@@ -43,9 +44,6 @@ class CheckBookItem(baseItem.BaseItem,db.Model):
 		month = datetime.datetime.today().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
 		c = CheckBookItem.all().filter('associated_user =',uid).filter('date >= ',month)
 		return c
-
-
-import logging
 
 class CheckBook(itemHandler.ItemHandler,webapp2.RequestHandler):
 

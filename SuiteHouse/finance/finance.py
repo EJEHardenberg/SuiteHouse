@@ -9,6 +9,7 @@ import os
 
 import checkbook
 import billTracker
+import wishList
 
 #Make sure to setup the template rendering evironment in the templates directory
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -42,4 +43,6 @@ application = webapp2.WSGIApplication([
     ('/finance/checkbook/',checkbook.CheckBook),
     ('/finance/billTracker',billTracker.BillTracker),
     ('/finance/billTracker/',billTracker.BillTracker),
+    ('/finance/wishList',wishList.WishList),
+    ('/finance/wishList/',wishList.WishList),
 ], debug=True)

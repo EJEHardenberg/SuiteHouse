@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+  <head>
+    {% include "globalStyles.html" %}
+     <!-- <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-41596225-1', 'suite-house.appspot.com');
+      ga('send', 'pageview');
+      </script> -->
+      <link rel="stylesheet" href="/stylesheets/finance.css" type="text/css">
+  </head>
+  <body>
+      <header>
+        <h1><span>P&amp;E</span>Suite House</h1>   
+        <h2>Your personal house management system</h2>
+        <span class="loggedIn">You are logged in as {{username}} <br/><a href="/finance" style="display:inline;">Return to finance menu</a></span>
+      </header>
+
+      <section>
+        <div>
+          <h1 id="header">{{username}}'s Wish List</h1>
+        </div>
+      </section>
+
+      {% if error %}
+      <section>
+        <div><h4>There was a problem on the page: {{error}}</h4></div>
+      </section>
+      {% endif %}
+
+      
+      <section>
+        <div>
+          <p class="dropButtons">
+            <a id="billDropForm" >Add to your Wish List</a>  
+          </p>
+          <div class="slide">
+            <form action="/finance/wishList" method="POST" id="billForm">
+              <label for="desciption">Description</label>
+              <input type="text" name="description" />
+              <label for="amount">Amount</label>
+              <input type="number" step="0.01" min="0" name="amount" /> 
+              <input type="submit" value="submit" />
+            </form>
+          </div>
+          <script type="text/javascript">                     
+          document.getElementById('billDropForm').onclick = function(){
+              var form = document.getElementById('billForm');         
+              //By adding this class, we trigger the css3 transition of the opacity to make it look like it fades in
+              if(form.className == 'fade'){
+                form.className = 'unfade';
+              }else{  
+                form.className = 'fade';
+              }
+          };
+        </script>
+
+        <div>
+          <table>
+            <thead>
+              <tr>
+                <th>Description</th>
+                <th>Amount</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in items %}
+              <!-- ref for updating information using key-->
+              <tr class="{{ loop.cycle('alt', '') }}" ref="{{item.key()}}">
+                <td>{{item.description}}</td>
+                <td class="expense">{{item.amount}}</td>
+                <td ><a class="deleteButton" ref="{{item.key()}}">Delete</a></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <script type="text/javascript">
+        //Bind the delete buttons to submit the delete request to the server as well as remove the row from here (no undo)
+        var buttons = document.getElementsByClassName('deleteButton');
+        for (var i = buttons.length - 1; i >= 0; i--) {
+          buttons[i].onclick = function(){
+            //Confirm:
+            if(confirm('Are you sure you want to remove this item? -- This cannot be undone --')){
+              var button = this;
+              
+              var xmlHttp = new XMLHttpRequest();
+              xmlHttp.onreadystatechange = function(xmlHttp){
+                if(this.readyState == 4 && this.status == 200){
+                  var keyToDelete = this.response;
+                  //remove the button from the user's sight
+                  var tr = button.parentNode;
+                  tr.parentNode.remove(tr); 
+                }
+              };
+              xmlHttp.open('DELETE','/finance/wishList',true);
+              xmlHttp.send(JSON.stringify({'key' : this.attributes.ref.nodeValue}));
+            }
+          };
+        };
+
+        function editDescription(td){
+          //We must change the td's inner to have an input tag
+          if(td.hasInput && typeof td.hasInput != "undefined"){
+            //Then something happens
+            var desc = td.children[0].value;
+            td.innerHTML = '';
+            td.textContent = desc;
+            td.hasInput = false;
+          }else{
+            //Create input node with value in it
+            var input = document.createElement('input');
+            var desc = td.textContent;
+            input.value   = desc;
+            td.textContent = 'Press enter to submit';
+            td.appendChild(input);
+
+            //Submit on enter
+            input.onkeypress = function(e){
+              //Submit the row to the put function to update
+              if(e.keyCode === 13){
+                //On enter key submit ajax
+                var xmlHttp = new XMLHttpRequest();
+                var input = this;
+                xmlHttp.onreadystatechange = function(xmlHttp){
+                  if(this.readyState == 4 && this.status == 200){
+                    var desc = td.children[0].value;
+                    td.innerHTML = '';
+                    td.textContent = desc;
+                    td.hasInput = false;    
+                  }
+                }; 
+                xmlHttp.open('PUT', '/finance/wishList',true);
+                var key = input.parentNode.parentNode.attributes.ref.nodeValue;
+                xmlHttp.send(JSON.stringify({'key' : key, 'description' : input.value}));
+              }
+            }
+
+
+            input.focus();
+            td.hasInput = true;
+          }
+        }
+
+        function editAmount(td){
+          if(td.hasInput && typeof td.hasInput != "undefined"){
+            //Then something happens
+            var amount = td.children[0].value;
+            td.innerHTML = '';
+            td.textContent = amount;
+            td.hasInput = false;
+          }else{
+            //Create input node with value in it
+            var input = document.createElement('input');
+            input.type="number";
+            input.step="0.01";
+            var amount = td.textContent;
+            input.value   = amount;
+            td.textContent = 'Press enter to submit';
+            td.appendChild(input);
+
+            //Submit on enter
+            input.onkeypress = function(e){
+              //Submit the row to the put function to update
+              if(e.keyCode === 13){
+                //On enter key submit ajax
+                var xmlHttp = new XMLHttpRequest();
+                var input = this;
+                xmlHttp.onreadystatechange = function(xmlHttp){
+                  if(this.readyState == 4 && this.status == 200){
+                    var amount = td.children[0].value;
+                    td.innerHTML = '';
+                    td.textContent = amount;
+                    td.hasInput = false;    
+                  }
+                }; 
+                xmlHttp.open('PUT', '/finance/wishList',true);
+                var key = input.parentNode.parentNode.attributes.ref.nodeValue;
+                xmlHttp.send(JSON.stringify({'key' : key, 'amount' : input.value}));
+              }
+            }
+
+
+            input.focus();
+            td.hasInput = true;
+          } 
+        }
+          
+        
+
+        //Bind the description and the amount td tags of each row to have bindings to make them editable
+        var trs = document.getElementsByTagName('tbody')[0].children;
+        for (var i = trs.length - 1; i >= 0; i--) {
+          //Pass the cell in so we can get to the whole row through the parentNode
+          trs[i].children[0].onclick = function(){ editDescription(this);};
+          trs[i].children[1].onclick = function(){ editAmount(this);};
+        };
+        
+      </script>
+
+        
+  </body>
+</html>
+{% endautoescape %}

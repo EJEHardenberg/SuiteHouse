@@ -21,7 +21,6 @@ import logging
 import time
 import datetime
 
-#import base classes
 import baseItem
 import itemHandler
 
@@ -31,44 +30,39 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     extensions=['jinja2.ext.autoescape'],autoescape=True)
 
 
-class BillItem(baseItem.BaseItem,db.Model):
-	"""Model of a fixed expense item"""
-	date = db.DateProperty(auto_now_add=True)
+class WishListItem(baseItem.BaseItem,db.Model):
+	"""Model of a checkbook item"""
 
 	@classmethod
 	def by_id(cls,uid):
-		c = BillItem.all().filter('associated_user =',uid)
+		c = WishListItem.all().filter('associated_user =',uid)
 		return c
 
-	@classmethod
-	def by_id_forMonth(cls,uid):
-		month = datetime.datetime.today().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-		c = BillItem.all().filter('associated_user =',uid).filter('date >= ',month)
-		return c
+class WishList(itemHandler.ItemHandler,webapp2.RequestHandler):
 
-
-import logging
-
-class BillTracker(itemHandler.ItemHandler,webapp2.RequestHandler):
 	@staticmethod
-	def getTotalBills():
-		"""Returns the total bill expenses from the database in a key value pair
-			{'bills' : x } 
+	def getTotalBudgetExpense():
+		"""Returns the total income and total expenses from the wishlist in a key value pair
+			{'expense' : x} 
 		"""
 
 		user = users.get_current_user()
 
 		if user:
 			#Get all the items associated with the user
-			bills = BillItem.by_id_forMonth(user.nickname())
+			wishlist = WishListItem.by_id_forMonth(user.nickname())
 
 			#aggregate data
-			runningBills = 0
+			runningIncome = 0
+			runningExpense = 0
 
-			for item in bills:
-				runningBills = runningBills + item.amount
+			for item in wishlist:
+				if item.amount < 0:
+					runningExpense = runningExpense + item.amount
+				else:
+					runningIncome = runningIncome + item.amount
 
-			return {'bills' : runningBills}
+			return {'income' : runningIncome, 'expense' : runningExpense}
 
 
 		else:
@@ -79,15 +73,15 @@ class BillTracker(itemHandler.ItemHandler,webapp2.RequestHandler):
 
 		if user:
 			#Get all the items associated with the user
-			bills = BillItem.by_id(user.nickname())
+			wishlist = WishListItem.by_id(user.nickname())
 
 			template_values = {
 				'username': user.nickname(),
-				'items' : bills,
+				'items' : wishlist,
 				'error' : self.request.get('err'),
 			}
 
-			template = JINJA_ENVIRONMENT.get_template('billTracker.html')
+			template = JINJA_ENVIRONMENT.get_template('wishList.html')
 			self.response.write(template.render(template_values))
 		else:
 			self.redirect(users.create_login_url(self.request.uri))
@@ -95,6 +89,7 @@ class BillTracker(itemHandler.ItemHandler,webapp2.RequestHandler):
 	def post(self):
 		user = users.get_current_user()
 		desc = cgi.escape(self.request.get('description'))
+
 		amount = cgi.escape(self.request.get('amount'))
 		err = ""
 		
@@ -107,17 +102,19 @@ class BillTracker(itemHandler.ItemHandler,webapp2.RequestHandler):
 			#Redirects here don't work for some reason
 			self.response.set_status(400,'Bad amount value')
 			self.response.write(err)
-			self.redirect('/finance/billTracker?err=%s' % cgi.escape(err))
+			self.redirect('/finance/wishList?err=%s' % cgi.escape(err))
 
-		#We negate the value because we don't except negative values in the html input form
-		amount = 0 - amount
+		postType = self.request.get('postType');
+
+		if(postType == 'expense'):
+			#If this has come from the expense form then we negate the value
+			amount = 0 - amount
 			
 
 		#Create the new item and store it in the database
 		if err == "":
-			newItem = BillItem(description=desc,amount=amount,associated_user=str(user.nickname()))
+			newItem = WishListItem(description=desc,amount=(0-amount),associated_user=str(user.nickname()))
 			newItem.put()
 			time.sleep(1) # this is so that when we do the redirect (to essentially refresh the page), we ensure the datastore has been updated and we see a new value
 			# we should redirect the user here, otherwise we ham up the redirects
-			self.redirect('/finance/billTracker') 
-			
+			self.redirect('/finance/wishList') #Probably want to pass some parameters to the url about success or not sucesss
