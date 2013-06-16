@@ -39,34 +39,50 @@ class WishListItem(baseItem.BaseItem,db.Model):
 		return c
 
 class WishList(itemHandler.ItemHandler,webapp2.RequestHandler):
+	wishes = []
+	totalWishes = 0
+	valuesRetrieved = False
 
 	@staticmethod
 	def getTotalBudgetExpense():
 		"""Returns the total income and total expenses from the wishlist in a key value pair
-			{'expense' : x} 
+			{'wishes' : x} 
 		"""
 
 		user = users.get_current_user()
 
 		if user:
 			#Get all the items associated with the user
-			wishlist = WishListItem.by_id_forMonth(user.nickname())
+			wishlist = WishListItem.by_id(user.nickname())
 
 			#aggregate data
-			runningIncome = 0
 			runningExpense = 0
 
 			for item in wishlist:
-				if item.amount < 0:
-					runningExpense = runningExpense + item.amount
-				else:
-					runningIncome = runningIncome + item.amount
+				runningExpense = runningExpense + item.amount
+				
 
-			return {'income' : runningIncome, 'expense' : runningExpense}
+			return { 'wishes' : runningExpense}
 
 
 		else:
 			self.redirect(users.create_login_url(self.request.uri))
+
+	def getStats(self):
+		if self.valuesRetrieved:
+			pass
+		else:
+			user = users.get_current_user()
+
+			if user:
+				items = WishListItem.by_id(user.nickname())
+				for item in items:
+					self.wishes.append(item)
+					self.totalWishes += item.amount
+				self.valuesRetrieved = True
+			else:
+				return None
+		return {'wishes' : self.wishes, 'totalWishes' : self.totalWishes}
 
 	def get(self):
 		user = users.get_current_user()

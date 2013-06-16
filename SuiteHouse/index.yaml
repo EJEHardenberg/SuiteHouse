@@ -10,6 +10,11 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
+- kind: BillItem
+  properties:
+  - name: associated_user
+  - name: date
+
 - kind: CheckBookItem
   properties:
   - name: associated_user

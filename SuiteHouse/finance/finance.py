@@ -10,6 +10,7 @@ import os
 import checkbook
 import billTracker
 import wishList
+import budget
 
 #Make sure to setup the template rendering evironment in the templates directory
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -25,11 +26,15 @@ class FinancePage(webapp2.RequestHandler):
 			self.redirect(users.create_login_url(self.request.uri))
 
 		checkBookInfo = checkbook.CheckBook.getTotalIncomeAndExpense()
+		billsInfo = billTracker.BillTracker.getTotalBills()
+		wishListInfo = wishList.WishList.getTotalBudgetExpense()
 
 		template_values = {
 			'username': user.nickname(),
 			'cbIncome' : checkBookInfo['income'],
 			'cbExpense' : checkBookInfo['expense'],
+			'bExpense' : billsInfo['bills'],
+			'wlExpense' : wishListInfo['wishes'],
 		}
 
 		template = JINJA_ENVIRONMENT.get_template('index.html')
@@ -45,4 +50,6 @@ application = webapp2.WSGIApplication([
     ('/finance/billTracker/',billTracker.BillTracker),
     ('/finance/wishList',wishList.WishList),
     ('/finance/wishList/',wishList.WishList),
+    ('/finance/budget',budget.Budget),
+    ('/finance/budget/',budget.Budget),
 ], debug=True)

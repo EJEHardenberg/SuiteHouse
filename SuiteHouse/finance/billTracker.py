@@ -50,6 +50,10 @@ class BillItem(baseItem.BaseItem,db.Model):
 import logging
 
 class BillTracker(itemHandler.ItemHandler,webapp2.RequestHandler):
+	bills = []
+	totalBills = 0
+	valuesRetrieved = False
+
 	@staticmethod
 	def getTotalBills():
 		"""Returns the total bill expenses from the database in a key value pair
@@ -73,6 +77,31 @@ class BillTracker(itemHandler.ItemHandler,webapp2.RequestHandler):
 
 		else:
 			self.redirect(users.create_login_url(self.request.uri))
+
+	def getStats(self):
+		if self.valuesRetrieved:
+			pass
+		else:
+			user = users.get_current_user()
+
+			if user:
+				#Get all the items associated with the user
+				billsFromDb = BillItem.by_id_forMonth(user.nickname())
+
+				#aggregate data
+				self.totalBills = 0
+
+				for item in billsFromDb:
+					self.totalBills = self.totalBills + item.amount
+					self.bills.append(item)
+			else:
+				return None
+
+		return {'bills' : self.bills, 'totalBills' : self.totalBills}
+
+
+
+
 
 	def get(self):
 		user = users.get_current_user()

@@ -46,6 +46,35 @@ class CheckBookItem(baseItem.BaseItem,db.Model):
 		return c
 
 class CheckBook(itemHandler.ItemHandler,webapp2.RequestHandler):
+	valuesRetrieved = False
+	incomes = []
+	expenses = []
+	totalIncome = 0
+	totalExpense = 0
+
+	def getStats(self):
+		if self.valuesRetrieved:
+			pass
+		else:
+			#Get everything for this month
+			user = users.get_current_user()
+			if user:
+				items = CheckBookItem.by_id_forMonth(user.nickname())
+				self.totalExpense = 0
+				self.totalIncome = 0
+				for item in items:
+					if item.amount < 0:
+						self.expenses.append(item)
+						self.totalExpense += item.amount
+					else:
+						self.incomes.append(item)
+						self.totalIncome += item.amount
+				self.valuesRetrieved = True
+			else:
+				#No can do
+				return None
+		return {'incomes' : self.incomes, 'expenses' : self.expenses, 'totalIncome' : self.totalIncome, 'totalExpense' : self.totalExpense}
+
 
 	@staticmethod
 	def getTotalIncomeAndExpense():
