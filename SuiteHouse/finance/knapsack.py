@@ -31,10 +31,11 @@ class Knapsack:
 	def __init__(self, limit=0,items=[]):
 		#Round all values up and place into the values
 		#also map each object
+		self.values = []
+		self.limit = 0
 		for item in items:
 			#need positive integers
 			item.amount = round(abs(item.amount)+.5)
-			logging.info(item.amount)
 			self.values.append(item)
 
 		self.limit = int(limit)
@@ -70,7 +71,7 @@ class Knapsack:
 		while(i >= 0 and currentW >= 0):
 			if (i==0 and m[i][currentW] > 0) or (m[i][currentW] != m[i-1][currentW]):
 				marked[i] = 1
-				currentW = currentW - self.values[i].amount
+				currentW = currentW - int(self.values[i].amount)
 			i = i-1
 		#marked now corresponds to which items are marked which we can use to sort which items were used or unused
 		used = []
@@ -80,9 +81,9 @@ class Knapsack:
 		for i in range(0,len(self.values)):
 			if(marked[i] == 1):
 				value += self.values[i].amount
-				used.append(self.values[i])
+				used.append(self.values[i].getJSON())
 			else:
-				unused.append(self.values[i]) 
+				unused.append(self.values[i].getJSON()) 
 
 		#Return the total amount used, as well as the two lists of items generated
 		return {'used' : value, 'usedItems' : used, 'unusedItems' : unused}

@@ -81,7 +81,42 @@ class Budget(webapp2.RequestHandler):
 				results = k.solve()
 				logging.info(results)
 
+				limit = limit - results['used']
+				#Now that we have that, we have a new limit how much money is leftover for wishlist items?
+				#We should really only advise people to purchase 'want' items from their wishlist when they've
+				#managed to buy all their expenses, so 
+				if not results['unusedItems']:
+					#unused items is empty
+					k2 = knapsack.Knapsack(round(abs(limit)+.5),wlInfo['wishes'])
+					wishResults = k2.solve()
+					logging.info(wishResults)
+					#Send back the results including the wishList
+
+					passback_values = {
+						'leftOver' : limit - wishResults['used'],
+						'expensesCovered' : results['usedItems'],
+						'expensesNotCovered' : results['unusedItems'],
+						'spentOnExpenses' : results['used'],
+						'wishListCovered' : wishResults['usedItems'],
+						'wishListNotCovered' : wishResults['unusedItems'],
+						'spentOnWishList' : wishResults['used'],
+					}
+				else:
+					#Just send back the results
+					passback_values = {
+						'leftOver' : limit,
+						'expensesCovered' : results['usedItems'],
+						'expensesNotCovered' : results['unusedItems'],
+						'spentOnExpenses' : results['used'],
+						'wishListCovered' : None,
+						'wishListNotCovered' : None,
+						'spentOnWishList' : None,
+					}
+				self.response.set_status(200,'Computation Complete')
+				self.response.write(json.dumps(passback_values))
+
 		else:
 			self.redirect(users.create_login_url(self.request.uri))
+
 
 		
