@@ -20,7 +20,7 @@
       <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
       <script>
         $(function() {
-          $( "#datepicker" ).datepicker({ dateFormat: "yy-mm-dd" });
+          $( ".datepicker" ).datepicker({ dateFormat: "yy-mm-dd" });
         });
       </script>
       <style type="text/css">
@@ -134,8 +134,8 @@
                 {% else %}
                   <td class="income">{{item.amount}}</td>
                 {% endif %}
-                <td>{{item.date}}</td> <!-- DATE HERE -->
-                <!-- <td><input type="text" id="datepicker" />{{item.date}}</td> -->
+                <!-- <td>{{item.date}}</td> --> <!-- DATE HERE -->
+                <td><input type="text" class="datepicker" value="{{item.date}}" readonly/></td>
                 <td ><a class="deleteButton" ref="{{item.key()}}">Delete</a></td>
               </tr>
               {% endfor %}
@@ -209,7 +209,7 @@
             input.focus();
             td.hasInput = true;
           }
-        }
+        } // end editDescription
 
         function editAmount(td){
           if(td.hasInput && typeof td.hasInput != "undefined"){
@@ -253,16 +253,20 @@
             input.focus();
             td.hasInput = true;
           } 
-        }
+        } // end editAmount
           
-        
+        function editDate(td){
+          // console.log("derp");
+          
+        } // end editDate
 
-        //Bind the description and the amount td tags of each row to have bindings to make them editable
+        //Bind the description, date and the amount td tags of each row to have bindings to make them editable
         var trs = document.getElementsByTagName('tbody')[0].children;
         for (var i = trs.length - 1; i >= 0; i--) {
           //Pass the cell in so we can get to the whole row through the parentNode
           trs[i].children[0].onclick = function(){ editDescription(this);};
           trs[i].children[1].onclick = function(){ editAmount(this);};
+          // trs[i].children[2].onclick = function(){ editDate(this);};
         };
         
       </script>
