@@ -21,8 +21,9 @@ import logging
 import time
 import datetime
 
-
+#import base classes
 import baseItem
+import itemHandler
 
 #Make sure to setup the template rendering evironment in the templates directory
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -47,7 +48,7 @@ class BillItem(baseItem.BaseItem,db.Model):
 
 import logging
 
-class BillTracker(webapp2.RequestHandler):
+class BillTracker(itemHandler.ItemHandler,webapp2.RequestHandler):
 	@staticmethod
 	def getTotalBills():
 		"""Returns the total bill expenses from the database in a key value pair
@@ -118,60 +119,4 @@ class BillTracker(webapp2.RequestHandler):
 			time.sleep(1) # this is so that when we do the redirect (to essentially refresh the page), we ensure the datastore has been updated and we see a new value
 			# we should redirect the user here, otherwise we ham up the redirects
 			self.redirect('/finance/billTracker') 
-
-	def delete(self):
-		"""Respond to an http delete request, this will delete whatever BillItem the request specifies"""
-
-		#TODO: Since we use the database key, we could probably just abstract this method to a higher class for each controller
-
-		#Get the key to the item
-		try:
-			body = json.loads((self.request.body))
-			key = body['key']
-			item = db.get(db.Key(encoded=str(key)))
-			item.delete()
-			self.response.set_status(200,json.dumps({'key' : key}))
-			self.response.write(key)
-		except Exception, e:
-			self.response.set_status(404,json.dumps({'key' : 'Not found'}))
-		else:
-			#Carry on my wayward (son
-			pass
 			
-	def put(self):
-		#Since this retrieves via key, we could probably abstract a good portion of it out to a controller class... 
-		body = json.loads(self.request.body)
-		key = body['key']
-
-		amount = None
-		description = None
-
-		try:
-			amount = body['amount']
-		except Exception, e:
-			#no amount to have
-			pass
-
-		try:
-			description = body['description']
-		except Exception, e:
-			#no description to have
-			pass
-
-		#Did they submit something worthwhile?
-		if amount or description:
-			try:
-				item = db.get(db.Key(encoded=str(key)))
-				if amount:
-					item.amount = float(amount)
-				if description:
-					item.description = description
-				item.put()
-				self.response.set_status(200,json.dumps({'key' : key}))
-				self.response.write(key)
-			except Exception, e:
-				logging.info(e)
-				self.response.set_status(500,json.dumps({'error' : str(e)}))
-				self.response.write('Could not complete update')
-
-		
