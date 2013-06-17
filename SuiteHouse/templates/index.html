@@ -22,22 +22,33 @@
       <div id="sidebar">
         <h3>Suite Applications:</h3>
         <ul id="nav">
-          <li><a id="aboutClick"> About SH    </a></li>
+          <li><a id="aboutClick">   About SH  </a></li>
           <li><a id="membersClick"> Members   </a></li>
+          <li><a id="recipesClick"> Recipes   </a></li>
           <li><a id="financesClick">Finances  </a></li>
           <li><a id="tasksClick">   Tasks     </a></li>
         </ul>
         <footer>
-          <h1>Developed by P. Vendeville, S. Perkins and E. Eldridge</h1>
+          <h1>Developed by <ul><li>P. Vendeville</li><li>S. Perkins</li><li>E. Eldridge</li></ul></h1>
         </footer>
       </div>
         <div id="content"><span class="loggedIn">You are logged in as {{username}}</span>
         <div id="aboutPane">
-          This is some really awesome text about all the trials and tribulations we put up with and shit to make this damn thing. Al"so we can replace this inline text with jinja blocks to make this easier to read.
+          <p>
+            <h2>Welcome to Suite House. </h2>
+          </p>
+          <p>
+            Suite House is a collection of programs to help you manage your home. Whether it be finances, chores to be done around the house, new roommates moving in, or even choosing what recipe you should have for dinner -Suite House has you covered.
+          </p>
+          
         </div>
-        <div id="membersPane">This pane tells the user about the member administration application which handles adding users to a house and all that type of stuff</div>
+        <div id="membersPane">
+          Coming soon...
+        </div>
         <div id="financesPane">
-          This pane tells the user about the various budgetting and finance applications available   through Suite House and provides nice links to each application right here. The finance applications will be connected, for example, one should be able to say you paid a certain bill from the bill tracker and create the bill from either checkbook or bill tracker. All this information can flow to the budgeting application which will perform the hardcore analysis
+          <p>
+            <h2>Manage your Finances</h2>
+          </p>         
 
           <ul>
             <li><h3><a href="/finance" >Finance Applications<a/></h3>
@@ -45,23 +56,24 @@
             </li>
             <ul>
             <li><h3><a href="/finance/checkbook" >Check Book</a></h3>
-              Informational text about the applications go here, describing what they do and everything like that
+              Your checkbook let's you keep track of any income you have as well as variable expenses like dinner outings, food purchases, and your day to day expenses
             </li>
             <li><h3><a href="/finance/wishList" >Wish List  </a></h3>
-              Informational text about the applications go here, describing what they do and everything like that
+              Do you really want that new dress or new suit? Well throw it on your wish list and the <a href="/finance/budget">Budget</a> program will tell you if you can afford to buy it!
             </li>
             <li><h3><a href="/finance/billTracker">Bill Tracker</a></h3>
-              Informational text about the applications go here, describing what they do and everything like that
+              Fixed expenses are a fact of life, keep track of your rent, electricy and other fixed expenses here.
             </li>
             <li><h3><a href="/finance/budget">Budget Assistance</a></h3>
-              Informational text about the applications go here, describing what they do and everything like that
+              Not sure if you can afford your style of living? Want to see if you can really afford buying that new car? With the budget assistance software you can find out if you can! Simply enter all the information into your checkbook, wish list, and bill tracker, and see what you can afford!
             </li>
             </ul>
 
           </ul>
           
         </div>
-        <div id="tasksPane">This pane tells the user a little bit about the tasks application and whatnot, I wonder if Sean has started imlpementing anything with this</div>
+        <div id="tasksPane">Coming soon</div>
+        <div id="recipePane">Coming soon</div>
       </div>
       
       <script type="text/javascript">
@@ -87,6 +99,9 @@
         }
         document.getElementById('tasksClick').onclick = function(){ hidePanes();
           document.getElementById('tasksPane').style.display = 'block'
+        }
+        document.getElementById('recipesClick').onclick = function(){ hidePanes();
+          document.getElementById('recipePane').style.display = 'block';
         }
       </script>
   </body>
