@@ -71,11 +71,11 @@ class Budget(webapp2.RequestHandler):
 			wlInfo = wl.getStats()
 
 			#First knap sack
-			limit = cbInfo['totalIncome'] - btInfo['totalBills']
+			limit = cbInfo['totalIncome'] - abs(btInfo['totalBills'])
 			#If we can't even afford our fixed bills, we're having a bad time.
 			if limit <= 0:
 				passback_values = {
-						'leftOver' : limit,
+						'leftOver' : round(limit,2),
 						'expensesCovered' : [],
 						'expensesNotCovered' : [],
 						'spentOnExpenses' : 0,
@@ -104,7 +104,7 @@ class Budget(webapp2.RequestHandler):
 					#Send back the results including the wishList
 
 					passback_values = {
-						'leftOver' : limit - wishResults['used'],
+						'leftOver' : round(limit - wishResults['used'],2),
 						'expensesCovered' : results['usedItems'],
 						'expensesNotCovered' : results['unusedItems'],
 						'spentOnExpenses' : results['used'],
@@ -116,7 +116,7 @@ class Budget(webapp2.RequestHandler):
 				else:
 					#Just send back the results
 					passback_values = {
-						'leftOver' : limit,
+						'leftOver' : round(limit,2),
 						'expensesCovered' : results['usedItems'],
 						'expensesNotCovered' : results['unusedItems'],
 						'spentOnExpenses' : results['used'],

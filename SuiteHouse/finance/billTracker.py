@@ -94,6 +94,7 @@ class BillTracker(itemHandler.ItemHandler,webapp2.RequestHandler):
 				for item in billsFromDb:
 					self.totalBills = self.totalBills + item.amount
 					self.bills.append(item)
+				self.valuesRetrieved = True
 			else:
 				return None
 
