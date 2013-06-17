@@ -1,7 +1,7 @@
 Suite House - Finance Module
 =============
 
-In development currently.
+In development currently. To see the current build of the system (which may be incomplete or down) go to [suite-house.appspot.com]
 
 Plans and Structure
 ---------
@@ -26,6 +26,7 @@ License:
 [Ethan Eldridge]: https://github.com/EJEHardenberg/
 [Sean Perkins]: https://github.com/scperkins/
 [Phelan Vendeville]: https://github.com/the-hobbes
+[suite-house.appspot.com] suite-house.appspot.com
 
 
 
