@@ -82,7 +82,7 @@ class Budget(webapp2.RequestHandler):
 						'wishListCovered' : [],
 						'wishListNotCovered' : [],
 						'spentOnwishList' : 0,
-						'totalBills' : btInfo['totalBills'],
+						'totalBills' : abs(btInfo['totalBills']),
 					}
 				self.response.set_status(200,'Computation Complete')
 				self.response.write(json.dumps(passback_values))
@@ -111,7 +111,7 @@ class Budget(webapp2.RequestHandler):
 						'wishListCovered' : wishResults['usedItems'],
 						'wishListNotCovered' : wishResults['unusedItems'],
 						'spentOnwishList' : wishResults['used'],
-						'totalBills' : btInfo['totalBills'],
+						'totalBills' : abs(btInfo['totalBills']),
 					}
 				else:
 					#Just send back the results
@@ -123,7 +123,7 @@ class Budget(webapp2.RequestHandler):
 						'wishListCovered' : [],
 						'wishListNotCovered' : [],
 						'spentOnwishList' : 0,
-						'totalBills' : btInfo['totalBills'],
+						'totalBills' : abs(btInfo['totalBills']),
 					}
 				self.response.set_status(200,'Computation Complete')
 				self.response.write(json.dumps(passback_values))
