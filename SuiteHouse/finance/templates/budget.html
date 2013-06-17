@@ -149,7 +149,7 @@
     			table.appendChild(tbody);
     			for (var i = jsonFromServer[id_base + 'NotCovered'].length - 1; i >= 0; i--) {
     				//Create table row for for each item and put them in
-    				var item = JSON.parse(jsonFromServer[id_base + 'Covered'][i]);
+    				var item = JSON.parse(jsonFromServer[id_base + 'NotCovered'][i]);
     				var tr = document.createElement('tr');
     				var td1 = document.createElement('td');
     				var td2 = document.createElement('td');
