@@ -1,4 +1,4 @@
-Suite House - Recipe Module
+Suite House - House Module
 =============
 
 In development currently. To see the current build of the system (which may be incomplete or down) go to [suite-house.appspot.com]
@@ -6,12 +6,7 @@ In development currently. To see the current build of the system (which may be i
 Plans and Structure
 ---------
 
-- Add a recipe
-- Remove/Edit recipes
-- Upvote other recipes 
-- Browse recipes regardless of user or house
-- Browse House Recipes (those associated with the house and any user's in it)
-- Simple editor for constructing paragraphs, ingredients lists and etc.
+The House module is where the House data model and other common features between packages are stored
 
 
 Developers:
