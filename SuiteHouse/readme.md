@@ -28,6 +28,14 @@ Developers:
 - [Sean Perkins]
 - [Phelan Vendeville]
 
+Designers:
+------------------
+- [Shelby Smullen]
+
+Designers:
+------------------
+- [Shelby Smullen]
+
 License:
 ----------
 [GNU Public License]
@@ -35,6 +43,7 @@ License:
 [GNU Public License]: http://www.gnu.org/licenses/gpl.html
 [Ethan Eldridge]: https://github.com/EJEHardenberg/
 [Sean Perkins]: https://github.com/scperkins/
+[Shelby Smullen]: http://github.com/ssmullen/
 [Phelan Vendeville]: https://github.com/the-hobbes
 
 

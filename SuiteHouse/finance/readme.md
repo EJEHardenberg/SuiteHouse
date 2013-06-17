@@ -15,8 +15,16 @@ Plans and Structure
 - Budgeteer
  - Budgetting program that takes the other 3 into consideration and attempts to come up with a schedule budget combination for a user to use based on their financial situation
 
-The homepage is currently just a menu to select each application, once each application is built I'd like to bring totals information or upcoming bills onto the homepage for easy access by the user
 
+Developers:
+------------------
+- [Ethan Eldridge]
+- [Sean Perkins]
+- [Phelan Vendeville]
+
+Designers:
+------------------
+- [Shelby Smullen]
 
 License:
 ----------
@@ -26,6 +34,7 @@ License:
 [Ethan Eldridge]: https://github.com/EJEHardenberg/
 [Sean Perkins]: https://github.com/scperkins/
 [Phelan Vendeville]: https://github.com/the-hobbes
+[Shelby Smullen]: http://github.com/ssmullen/
 [suite-house.appspot.com]: http://suite-house.appspot.com
 
 
