@@ -75,13 +75,16 @@ class WishList(itemHandler.ItemHandler,webapp2.RequestHandler):
 			user = users.get_current_user()
 
 			if user:
-				items = WishListItem.by_id(user.nickname())
-				for item in items:
-					self.wishes.append(item)
-					self.totalWishes += item.amount
-				self.valuesRetrieved = True
-			else:
-				return None
+				if self.valuesRetrieved:
+					pass
+				else:
+					self.wishes = []
+					self.totalWishes = 0
+					items = WishListItem.by_id(user.nickname())
+					for item in items:
+						self.wishes.append(item)
+						self.totalWishes += item.amount
+					self.valuesRetrieved = True
 		return {'wishes' : self.wishes, 'totalWishes' : self.totalWishes}
 
 	def get(self):

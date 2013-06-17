@@ -56,6 +56,10 @@ class CheckBook(itemHandler.ItemHandler,webapp2.RequestHandler):
 		if self.valuesRetrieved:
 			pass
 		else:
+			self.incomes = []
+			self.expenses = []
+			self.totalExpense = 0
+			self.totalExpense = 0
 			#Get everything for this month
 			user = users.get_current_user()
 			if user:

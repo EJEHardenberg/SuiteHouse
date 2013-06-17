@@ -85,18 +85,23 @@ class BillTracker(itemHandler.ItemHandler,webapp2.RequestHandler):
 			user = users.get_current_user()
 
 			if user:
-				#Get all the items associated with the user
-				billsFromDb = BillItem.by_id_forMonth(user.nickname())
 
-				#aggregate data
-				self.totalBills = 0
+				if self.valuesRetrieved:
+					pass
+				else:
+					self.bills = []
+					self.totalBills = 0
+					
+					#Get all the items associated with the user
+					billsFromDb = BillItem.by_id_forMonth(user.nickname())
 
-				for item in billsFromDb:
-					self.totalBills = self.totalBills + item.amount
-					self.bills.append(item)
-				self.valuesRetrieved = True
-			else:
-				return None
+					#aggregate datava
+					self.totalBills = 0
+
+					for item in billsFromDb:
+						self.totalBills = self.totalBills + item.amount
+						self.bills.append(item)
+					self.valuesRetrieved = True
 
 		return {'bills' : self.bills, 'totalBills' : self.totalBills}
 
