@@ -22,6 +22,9 @@ handlers:
 - url: /finance.*
   script: finance.finance.application
 
+- url: /recipe.*
+  script: recipe.recipe.application
+
 - url: /.*
   script: index.application
 
