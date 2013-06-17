@@ -1,1 +1,187 @@
-budget.html
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+  <head>
+    {% include "globalStyles.html" %}
+     <!-- <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-41596225-1', 'suite-house.appspot.com');
+      ga('send', 'pageview');
+      </script> -->
+      <link rel="stylesheet" href="/stylesheets/finance.css" type="text/css">
+  </head>
+  <body>
+      	<header>
+        	<h1><span>VP&amp;E</span>Suite House</h1>   
+        	<span class="loggedIn">You are logged in as {{username}} <br/><a href="/" style="display:inline;">Return to main menu</a></span>
+      	</header>
+        
+      	<section>
+        	<div class="centerMe">
+        		<div>
+        			<p class="dropButtons">
+            			<a id="calcBud" >Calculate Budget</a>
+          			</p>
+        		</div>
+        	</div>
+    	</section>	
+
+    	<section>
+    		<ul class="boxes budgetBoxes">
+          		<li><h3>Budget Results</h3>
+          			<ul class="budgetDetails" id="results">
+          				<li><h3>Press the calculate budget</h3></li>
+          			</ul>
+          			
+          		</li>
+          		<ul class"boxes">
+          			<li><h3>Expense Details</h3>
+          				<ul id="expensesDetails">
+
+          				</ul>
+    	        	</li>
+        	    	<li><h3>WishList Details</h3>
+        	    		<ul id="wishListDetails">
+
+        	    		</ul>
+            		</li>
+          		</ul>
+            	
+ 	        </ul>
+    	</section>
+    	<script type="text/javascript">
+    		function showResults(jsonFromServer){
+    			var list = document.getElementById('results');
+    			list.innerHTML = '';
+    			//Show how much is leftover'
+    			var h3 = document.createElement('h3');
+    			if(jsonFromServer.leftOver < 0){
+    				h3.textContent = 'You cannot afford your expenses';
+    			}else{
+    				h3.textContent = 'You have ' + jsonFromServer.leftOver + " dollars left";
+    			}
+    			list.appendChild(document.createElement('li').appendChild(h3));
+
+    			//Show how much was spent on bills, expenses, and wishlist
+    			var spent = [jsonFromServer.totalBills, jsonFromServer.spentOnExpenses, jsonFromServer.spentOnwishList];
+    			var text = ['Total spent on bills', 'Total spent on expenses', 'Total spent on wish list']
+    			for (var i = spent.length - 1; i >= 0; i--) {
+    				var li = document.createElement('li');
+    				li.appendChild(document.createTextNode(text[i] + ' ' + spent[i]));
+    				list.appendChild(li);
+    			};
+
+    		}
+
+    		function capitaliseFirstLetter(string)
+			{
+			    return string.charAt(0).toUpperCase() + string.slice(1);
+			}
+
+    		function listResults(jsonFromServer, id_base ){
+    			//id_base is either expense or wishList and corresponds to 
+    			//the id for the list (minus Details) as well as the base for
+    			//the json key
+    			var list = document.getElementById(id_base + 'Details');
+    			list.innerHTML = '';
+    			var headerLi = document.createElement('li');
+    			var headerLiText = document.createElement('h4');
+    			headerLiText.textContent = 'Used ' + capitaliseFirstLetter( id_base.toLowerCase() )+ ' Items';
+    			list.appendChild(headerLi.appendChild(headerLiText));
+
+    			//Create a table for the used items
+    			var table = document.createElement('table');
+    			var thead = document.createElement('thead');
+    			var trhead = document.createElement('tr');
+    			var th1 = document.createElement('th');
+    			var th2 = document.createElement('th');
+    			var tbody = document.createElement('tbody');
+
+    			th1.textContent = 'Description';
+    			th2.textContent = 'Amount';
+    			table.appendChild(thead);
+    			thead.appendChild(trhead);
+    			trhead.appendChild(th1);
+    			trhead.appendChild(th2);
+    			table.appendChild(tbody);
+    			for (var i = jsonFromServer[id_base + 'Covered'].length - 1; i >= 0; i--) {
+    				//Create table row for for each item and put them in
+    				var item = JSON.parse(jsonFromServer[id_base + 'Covered'][i]);
+    				var tr = document.createElement('tr');
+    				var td1 = document.createElement('td');
+    				var td2 = document.createElement('td');
+    				tr.className ='itemlist';
+    				td2.className = 'expense';
+    				td1.textContent = item.description;
+    				td2.textContent = item.amount;
+    				tr.appendChild(td1);
+    				tr.appendChild(td2);
+    				tbody.appendChild(tr);
+
+    			};
+    			list.appendChild(document.createElement('li').appendChild(table));
+
+    			var headerLi = document.createElement('li');
+    			var headerLiText = document.createElement('h4');
+    			headerLiText.textContent = 'Unused ' + capitaliseFirstLetter( id_base.toLowerCase() )+ ' Items';
+    			list.appendChild(headerLi.appendChild(headerLiText));
+
+    			//unused items table creation
+
+    			//Create a table for the used items
+    			var table = document.createElement('table');
+    			var thead = document.createElement('thead');
+    			var trhead = document.createElement('tr');
+    			var th1 = document.createElement('th');
+    			var th2 = document.createElement('th');
+    			var tbody = document.createElement('tbody');
+
+    			th1.textContent = 'Description';
+    			th2.textContent = 'Amount';
+    			table.appendChild(thead);
+    			thead.appendChild(trhead);
+    			trhead.appendChild(th1);
+    			trhead.appendChild(th2);
+    			table.appendChild(tbody);
+    			for (var i = jsonFromServer[id_base + 'NotCovered'].length - 1; i >= 0; i--) {
+    				//Create table row for for each item and put them in
+    				var item = JSON.parse(jsonFromServer[id_base + 'Covered'][i]);
+    				var tr = document.createElement('tr');
+    				var td1 = document.createElement('td');
+    				var td2 = document.createElement('td');
+    				tr.className ='itemlist';
+    				td2.className = 'expense';
+    				td1.textContent = item.description;
+    				td2.textContent = item.amount;
+    				tr.appendChild(td1);
+    				tr.appendChild(td2);
+    				tbody.appendChild(tr);
+
+    			};
+    			list.appendChild(document.createElement('li').appendChild(table));
+
+    		}
+
+          	//Bind the calculate button to posting and recieving information
+          	document.getElementById('calcBud').onclick = function(){
+          		var xmlHttp = new XMLHttpRequest();
+              	xmlHttp.onreadystatechange = function(xmlHttp){
+                if(this.readyState == 4 && this.status == 200){
+                  var response = JSON.parse(this.response);
+                  showResults(response);
+                  listResults(response,'expenses');
+                  listResults(response,'wishList');
+                }
+              };
+              xmlHttp.open('POST','/finance/budget',true);
+              xmlHttp.send(null);
+          	}
+         </script>
+        
+  </body>
+</html>
+{% endautoescape %}

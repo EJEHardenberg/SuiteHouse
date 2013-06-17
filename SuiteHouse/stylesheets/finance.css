@@ -157,3 +157,38 @@ p.dropButtons + p.dropButtons{
 .slide > #expenseForm,.slide > #billForm{
 	background-color: #ff0000 ;
 }
+#calcBud{
+	background-color: #ff00aa;
+	opacity: .8;
+	border-radius: .5em;
+	padding: .5em;
+	transition: opacity,background-color 1s ease-in-out;
+	-moz-transition: opacity,background-color 1s ease-in-out;
+    -webkit-transition: opacity,background-color 1s ease-in-out;
+}
+#calcBud:hover{
+	background-color: #aaaaff;
+	opacity: 1;
+}
+section > .centerMe{
+	margin-top: 2em;
+}
+ul.budgetDetails{
+	margin: 0;
+}
+ul.budgetDetails li{
+	width: 100%;
+	padding: 0;	
+	min-height: auto;
+}
+tr.itemlist td{
+	border-bottom-style: solid;
+	border-color: #aaaaff;
+	border-width: medium;
+	transition: opacity,background-color 1s ease-in-out;
+	-moz-transition: opacity,background-color 1s ease-in-out;
+    -webkit-transition: opacity,background-color 1s ease-in-out;
+}
+tr.itemlist td:hover{
+	border-color: #ffffff;
+};

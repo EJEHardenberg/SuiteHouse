@@ -74,7 +74,18 @@ class Budget(webapp2.RequestHandler):
 			limit = cbInfo['totalIncome'] - btInfo['totalBills']
 			#If we can't even afford our fixed bills, we're having a bad time.
 			if limit <= 0:
-				pass
+				passback_values = {
+						'leftOver' : limit,
+						'expensesCovered' : [],
+						'expensesNotCovered' : [],
+						'spentOnExpenses' : 0,
+						'wishListCovered' : [],
+						'wishListNotCovered' : [],
+						'spentOnwishList' : 0,
+						'totalBills' : btInfo['totalBills'],
+					}
+				self.response.set_status(200,'Computation Complete')
+				self.response.write(json.dumps(passback_values))
 			else:
 				#Solve the knapsack problem using the limit and the expenses
 				k = knapsack.Knapsack(round(abs(limit)+.5),cbInfo['expenses'])
@@ -99,7 +110,8 @@ class Budget(webapp2.RequestHandler):
 						'spentOnExpenses' : results['used'],
 						'wishListCovered' : wishResults['usedItems'],
 						'wishListNotCovered' : wishResults['unusedItems'],
-						'spentOnWishList' : wishResults['used'],
+						'spentOnwishList' : wishResults['used'],
+						'totalBills' : btInfo['totalBills'],
 					}
 				else:
 					#Just send back the results
@@ -108,9 +120,10 @@ class Budget(webapp2.RequestHandler):
 						'expensesCovered' : results['usedItems'],
 						'expensesNotCovered' : results['unusedItems'],
 						'spentOnExpenses' : results['used'],
-						'wishListCovered' : None,
-						'wishListNotCovered' : None,
-						'spentOnWishList' : None,
+						'wishListCovered' : [],
+						'wishListNotCovered' : [],
+						'spentOnwishList' : 0,
+						'totalBills' : btInfo['totalBills'],
 					}
 				self.response.set_status(200,'Computation Complete')
 				self.response.write(json.dumps(passback_values))

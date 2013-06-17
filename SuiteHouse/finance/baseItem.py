@@ -9,4 +9,4 @@ class BaseItem(db.Model):
 	associated_user = db.StringProperty(required=True) #user_id of user
 
 	def getJSON(self):
-		return '{ "description" : %s, "amount" : %s, }' % (self.description,str(self.amount))
+		return '{ "description" : "%s", "amount" : %s }' % (self.description,str(self.amount))
