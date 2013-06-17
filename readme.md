@@ -1,7 +1,7 @@
 Suite House
 =============
 
-In development currently.
+In development currently. But you can see the current deployed system (which may be incomplete or down) at [suite-house.appspot.com] 
 
 Setup
 ------------------
@@ -26,6 +26,7 @@ License:
 [Ethan Eldridge]: https://github.com/EJEHardenberg/
 [Sean Perkins]: https://github.com/scperkins/
 [Phelan Vendeville]: https://github.com/the-hobbes
+[suite-house.appspot.com] http://suite-house.appspot.com
 
 
 

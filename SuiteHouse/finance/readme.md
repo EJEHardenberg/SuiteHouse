@@ -26,7 +26,7 @@ License:
 [Ethan Eldridge]: https://github.com/EJEHardenberg/
 [Sean Perkins]: https://github.com/scperkins/
 [Phelan Vendeville]: https://github.com/the-hobbes
-[suite-house.appspot.com] suite-house.appspot.com
+[suite-house.appspot.com] http://suite-house.appspot.com
 
 
 
