@@ -23,7 +23,10 @@ class House(db.Model):
 	@classmethod
 	def findHouseIDForUser(cls,uid):
 		u = House.all().filter('associated_users = ', uid).get()
-		return u.key().id()
+		if u:
+			return u.key().id()
+		else:
+			return None
 
 	def addMemberToHouse(cls,uid,house_id):
 		#Is the user part of any other house?

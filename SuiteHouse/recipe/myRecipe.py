@@ -24,7 +24,7 @@ class MyRecipes(webapp2.RequestHandler):
 		
 
 		if user:
-			house = house.House.findHouseIDForUser(user.nickname())
+			h = house.House.findHouseIDForUser(user.nickname())
 
 			template_values = {
 				'username': user.nickname(),
