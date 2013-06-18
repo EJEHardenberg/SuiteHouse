@@ -13,4 +13,5 @@ class House(db.Model):
 	"""
 
 	#Should figure out how to setup the ancestor query
-	associated_users = db.StringProperty(required=True) #user_id's of user's
+	house_id = db.IntegerProperty()
+	associated_users = db.StringListProperty() #user_id's of user's

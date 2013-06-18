@@ -15,6 +15,31 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__) + '/templates/'),
     extensions=['jinja2.ext.autoescape'])
 
+class Recipe(db.Model):
+	"""
+		Recipes are a list of ingredients, a user associated, a house associated, and instructions on how to make it
+	"""
+	instructions = db.TextProperty()
+	ingredients = db.StringListProperty()
+	associated_user = db.StringProperty(required=True)
+	house_id = db.IntegerProperty(required=True)
+
+	@classmethod
+	def getHouseRecipes(cls,house_id):
+		c = Recipe.all().filter('house_id =',house_id)
+		return c
+
+	@classmethod
+	def getHouseRecipeForUser(cls,house_id,associated_user):
+		c = Recipe.all().filter('house_id = ', house_id).filter('associated_user ', = associated_user)
+		return c
+
+	@classmethod
+	def getUserRecipes(cls,associated_user):
+		c = Recipe.all().filter('associated_user = ', associated_user)
+		return c
+
+
 class RecipeHandler(webapp2.RequestHandler):
 
 	def get(self):
