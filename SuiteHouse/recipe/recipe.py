@@ -2,6 +2,8 @@
 from google.appengine.api import users
 from google.appengine.ext import db
 
+from house import house
+import myRecipe
 
 import webapp2
 import jinja2
@@ -31,7 +33,7 @@ class Recipe(db.Model):
 
 	@classmethod
 	def getHouseRecipeForUser(cls,house_id,associated_user):
-		c = Recipe.all().filter('house_id = ', house_id).filter('associated_user ', = associated_user)
+		c = Recipe.all().filter('house_id = ', house_id).filter('associated_user =',  associated_user)
 		return c
 
 	@classmethod
@@ -61,5 +63,7 @@ class RecipeHandler(webapp2.RequestHandler):
 application = webapp2.WSGIApplication([
     ('/recipe', RecipeHandler),
     ('/recipe/', RecipeHandler),
+    ('/recipe/myrecipes',myRecipe.MyRecipes),
+    ('/recipe/myrecipes/',myRecipe.MyRecipes),
 
 ], debug=True)

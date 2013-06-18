@@ -22,7 +22,7 @@ class House(db.Model):
 
 	@classmethod
 	def findHouseIDForUser(cls,uid):
-		u = House.all().filter('associated_users = ' uid).get()
+		u = House.all().filter('associated_users = ', uid).get()
 		return u.key().id()
 
 	def addMemberToHouse(cls,uid,house_id):
