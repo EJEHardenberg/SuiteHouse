@@ -13,5 +13,30 @@ class House(db.Model):
 	"""
 
 	#Should figure out how to setup the ancestor query
-	house_id = db.IntegerProperty()
 	associated_users = db.StringListProperty() #user_id's of user's
+
+	@classmethod
+	def findHouseByID(cls,house_id):
+		u = House.all().get_by_id(house_id)
+		return u
+
+	@classmethod
+	def findHouseIDForUser(cls,uid):
+		u = House.all().filter('associated_users = ' uid).get()
+		return u.key().id()
+
+	def addMemberToHouse(cls,uid,house_id):
+		#Is the user part of any other house?
+		old = House.findHouseIDForUser(uid)
+		if old:
+			#Remove from house
+			old.associated_users.remove(uid)
+		newH = House.findHouseByID(house_id)
+		if newH:
+			newH.associated_users.append(uid)
+		else:
+			newH = House(associated_users=[uid])
+		#Write.
+		newH.put()
+		return newH,key().id()
+
