@@ -96,6 +96,7 @@
               xmlHttp.onreadystatechange = function(xmlHttp){
                 if(this.readyState == 4 && this.status == 200){
                   var keyToDelete = this.response;
+                  console.log(this.response);
                   //remove the button from the user's sight
                   var tr = button.parentNode;
                   tr.parentNode.remove(tr); 

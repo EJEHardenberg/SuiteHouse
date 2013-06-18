@@ -35,6 +35,7 @@ class ItemHandler(webapp2.RequestHandler):
 			self.response.write(key)
 		except Exception, e:
 			self.response.set_status(404,json.dumps({'key' : 'Not found'}))
+			logging.error(e)
 		else:
 			#Carry on my wayward (son
 			pass
