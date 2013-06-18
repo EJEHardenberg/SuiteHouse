@@ -137,3 +137,7 @@ class WishList(itemHandler.ItemHandler,webapp2.RequestHandler):
 			time.sleep(1) # this is so that when we do the redirect (to essentially refresh the page), we ensure the datastore has been updated and we see a new value
 			# we should redirect the user here, otherwise we ham up the redirects
 			self.redirect('/finance/wishList') #Probably want to pass some parameters to the url about success or not sucesss
+
+	def delete(self):
+		logging.info("calling super")
+		super(WishList,self).delete()

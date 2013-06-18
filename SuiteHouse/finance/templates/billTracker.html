@@ -95,7 +95,7 @@
             //Confirm:
             if(confirm('Are you sure you want to remove this item? -- This cannot be undone --')){
               var button = this;
-              
+              var keyToDelete = button.attributes.ref.nodeValue
               var xmlHttp = new XMLHttpRequest();
               xmlHttp.onreadystatechange = function(xmlHttp){
                 if(this.readyState == 4 && this.status == 200){
@@ -105,8 +105,8 @@
                   tr.parentNode.remove(tr); 
                 }
               };
-              xmlHttp.open('DELETE','/finance/billTracker',true);
-              xmlHttp.send(JSON.stringify({'key' : this.attributes.ref.nodeValue}));
+              xmlHttp.open('DELETE','/finance/billTracker?key='+keyToDelete,true);
+              xmlHttp.send(null);
             }
           };
         };

@@ -27,8 +27,7 @@ class ItemHandler(webapp2.RequestHandler):
 		"""Respond to an http delete request, this will delete whatever Item the request specifies"""
 		#Get the key to the item
 		try:
-			body = json.loads((self.request.body))
-			key = body['key']
+			key = self.request.get("key")
 			item = db.get(db.Key(encoded=str(key)))
 			item.delete()
 			self.response.set_status(200,json.dumps({'key' : key}))
