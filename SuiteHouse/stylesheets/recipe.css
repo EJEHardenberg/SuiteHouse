@@ -38,5 +38,44 @@ ul.boxes{
 	margin: auto;
 	margin-top: 1em;
 	vertical-align: top;
+}
 
+/*For myrecipes page */
+.recipeEditor *{
+	border-radius: .25em;
+}
+section.recipeEditor{
+	width: 100%;
+	margin: auto;
+	text-align: center;
+}
+#recipeTitle h3,#recipeIngredients p{
+	width: 100%;
+}
+#recipeTitle input{
+	width: 40%;
+	height: 2em;
+	font-weight: bolder;
+	font-size: 120%;
+	text-align: center;
+}
+#recipeIngredients textarea{
+	width: 30%;
+	height: 
+}
+#instructionsList,#ingredientsList{
+	list-style: none;
+}
+#instructionsList li{
+	margin-bottom: 2em;
+}
+#instructionsList li textarea{
+	width: 70%;
+	height: 100px;
+}
+#ingredientsList li input{
+	border: none;
+	border-left: thin solid black;
+	border-bottom: thin solid black;
+	width: 40%;
 }

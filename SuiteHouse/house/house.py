@@ -26,7 +26,7 @@ class House(db.Model):
 		if u:
 			return u.key().id()
 		else:
-			return None
+			return -1
 
 	def addMemberToHouse(cls,uid,house_id):
 		#Is the user part of any other house?

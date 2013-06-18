@@ -17,11 +17,47 @@
       <header>
         <h1><span>VSP&amp;E</span>Suite House</h1>
         <h2>Your personal house management system</h2>
-        <span class="loggedIn">You are logged in as {{username}} <br/><a href="/" style="display:inline;">Return to main menu</a></span>
-      </header>
+        <span class="loggedIn">You are logged in as {{username}} <br/><a href="/recipe" style="display:inline;">Return to recipe menu</a></span>
+      </header>    
 
-      <section>
-
+      <!--Give a nice editor to create recipes -->
+      <section class="recipeEditor">
+        <!-- Display the first 10 items in the list -->
+        <h3>Your Recipes</h3>
+        <select>
+          <option ref="special">Select a Recipe</option>
+        {% for recipe in recipes%}
+              <option ref="{{recipe.key()}}">{{recipe.title}}</option>
+        {% endfor %}
+        </select>
+        <form action="/recipe/myrecipes" method="POST">
+          <div id="recipeTitle">
+            <h3>Recipe Title</h3>
+            <input type="text" name="title"/>
+          </div>
+          <div id="recipeIngredients">
+            <h3>Ingredients</h3>
+            <ul id="ingredientsList">
+              <li><input type="text" name="ingredients[]"/></li>
+              <li><input type="text" name="ingredients[]"/></li>
+              <li><input type="text" name="ingredients[]"/></li>
+            </ul>
+            <a id="moreIngredients">Add Ingredient</a>
+          </div>
+          <div id="recipeInstructions">
+            <h3>Instructions</h3>
+            <ul id="instructionsList">
+              <li><textarea name="instructions[]"></textarea></li>
+              <li><textarea name="instructions[]"></textarea></li>
+            </ul>
+            <a id="moreInstructions" >Add Paragraph</a>
+          </div>
+          
+          <input type="submit" value="Submit Recipe"/>
+          <input type="reset" name="delete" value="Delete Recipe" />
+          
+          
+        </form>
       </section>
 
       
