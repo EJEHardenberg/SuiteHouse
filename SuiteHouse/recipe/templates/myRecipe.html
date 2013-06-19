@@ -53,7 +53,7 @@
               input.name = 'ingredients[]';
               li.appendChild(input);
               document.getElementById('ingredientsList').appendChild(li);
-            }
+            };
           </script>
           <div id="recipeInstructions">
             <h3>Instructions</h3>
@@ -63,6 +63,16 @@
             </ul>
             <a id="moreInstructions" >Add Paragraph</a>
           </div>
+          <script type="text/javascript">
+            //This piece of script handles adding more textarea's to the instructions list
+            document.getElementById('moreInstructions').onclick = function(){
+              var li = document.createElement('li');
+              var input = document.createElement('textarea');
+              input.name = 'instructions[]';
+              li.appendChild(input);
+              document.getElementById('instructionsList').appendChild(li);
+            };
+          </script>
           
           <input type="submit" value="Submit Recipe"/>
           <input type="reset" name="delete" value="Delete Recipe" />
