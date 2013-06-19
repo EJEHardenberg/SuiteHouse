@@ -44,6 +44,17 @@
             </ul>
             <a id="moreIngredients">Add Ingredient</a>
           </div>
+          <script type="text/javascript">
+            //This piece of script handles adding more input's to the ingredients list
+            document.getElementById('moreIngredients').onclick = function(){
+              var li = document.createElement('li');
+              var input = document.createElement('input');
+              input.type = 'text';
+              input.name = 'ingredients[]';
+              li.appendChild(input);
+              document.getElementById('ingredientsList').appendChild(li);
+            }
+          </script>
           <div id="recipeInstructions">
             <h3>Instructions</h3>
             <ul id="instructionsList">
