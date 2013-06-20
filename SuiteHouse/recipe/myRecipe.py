@@ -11,8 +11,10 @@ import jinja2
 
 #Import os for finding jinja
 import os
+import time
 
 import logging
+
 
 #Make sure to setup the template rendering evironment in the templates directory
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -41,7 +43,27 @@ class MyRecipes(webapp2.RequestHandler):
 			self.redirect(users.create_login_url(self.request.uri))
 
 	def post(self):
-		logging.info(self.request.body)
+
+		try:
+			user = users.get_current_user()
+
+			if user:
+				h = house.House.findHouseIDForUser(user.nickname())
+
+				title = self.request.get('title')
+				ingredients = self.request.get_all('ingredients[]')
+				instructions = self.request.get_all('instructions[]')
+				
+				userRecipe = recipe.Recipe(title=title,instructions=instructions,ingredients=ingredients,house_id=h,associated_user=user.nickname())
+				userRecipe.put()
+				time.sleep(1)
+				self.redirect('/recipe/myrecipes')
+
+		except Exception, e:
+			logging.error("Problem creating recipe ")
+			logging.error(e)
+			self.response.set_status(400,'Bad Request')
+			self.redirect('/recipe/myrecipes')
 
 		
 

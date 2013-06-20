@@ -22,7 +22,7 @@ class Recipe(db.Model):
 		Recipes are a list of ingredients, a user associated, a house associated, and instructions on how to make it
 	"""
 	title = db.StringProperty(required=True)
-	instructions = db.TextProperty()
+	instructions = db.StringListProperty()
 	ingredients = db.StringListProperty()
 	associated_user = db.StringProperty(required=True)
 	house_id = db.IntegerProperty(required=True)
