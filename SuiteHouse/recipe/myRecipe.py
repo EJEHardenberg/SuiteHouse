@@ -26,21 +26,40 @@ class MyRecipes(webapp2.RequestHandler):
 	def get(self):
 		user = users.get_current_user()		
 
-		if user:
-			h = house.House.findHouseIDForUser(user.nickname())
-			#Grab the user's recipes
+		try:
+			#If there's a key then that means we're responding to an ajax request and should send back json of the recipe
+			key = self.request.get('key')
+
+			requestedRecipe = db.get(db.Key(encoded=str(key)))
+			self.response.set_status(200,json.dumps({'key' : key, 
+													 'title' : requestedRecipe.title, 
+													 'ingredients' : json.dumps(requestedRecipe.ingredients),
+													 'instructions': json.dumps(requestedRecipe.instructions),
+													 'rank' : requestedRecipe.rank
+													 }))
+			self.response.write(json.dumps({'key' : key, 
+													 'title' : requestedRecipe.title, 
+													 'ingredients' : json.dumps(requestedRecipe.ingredients),
+													 'instructions': json.dumps(requestedRecipe.instructions),
+													 'rank': requestedRecipe.rank
+													 }))
 			
-			userRecipes = recipe.Recipe.getUserRecipes(user.nickname())
+		except Exception, e:
+			if user:
+				h = house.House.findHouseIDForUser(user.nickname())
+				#Grab the user's recipes
+			
+				userRecipes = recipe.Recipe.getUserRecipes(user.nickname())
 
 			
-			template_values = {
-				'username': user.nickname(),
-				'recipes' : userRecipes
-			}
-			template = JINJA_ENVIRONMENT.get_template('myRecipe.html')
-			self.response.write(template.render(template_values))
-		else:
-			self.redirect(users.create_login_url(self.request.uri))
+				template_values = {
+					'username': user.nickname(),
+					'recipes' : userRecipes
+				}
+				template = JINJA_ENVIRONMENT.get_template('myRecipe.html')
+				self.response.write(template.render(template_values))
+			else:
+				self.redirect(users.create_login_url(self.request.uri))
 
 	def post(self):
 

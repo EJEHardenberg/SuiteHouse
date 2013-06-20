@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% autoescape true %}
+{% autoescape false %}
 <html>
   <head>
     {% include "globalStyles.html" %}
@@ -27,7 +27,7 @@
         <select>
           <option ref="special">Select a Recipe</option>
         {% for recipe in recipes%}
-              <option ref="{{recipe.key()}}" title={{recipe.title}} instructions={{recipe.instructions}}, ingredients={{recipe.ingredients  }}>{{recipe.title}}</option>
+              <option ref="{{recipe.key()}}" >{{recipe.title}}</option>
         {% endfor %}
         </select>
         <form action="/recipe/myrecipes" method="POST">
@@ -103,7 +103,18 @@
             var select = document.getElementsByTagName('select')[0];
               select.onchange = function(){
                 if(select.selectedIndex != 0){
-                  //Not the default option
+                  //Not the default option, which means it's a recipe
+                  var opt = select.options[select.selectedIndex];
+                  var key =opt.attributes.ref.value;
+                  //Submit an ajax request for the recipe information to load.
+                  var xmlHttp = new XMLHttpRequest();
+                  xmlHttp.onreadystatechange = function(xmlHttp){
+                    if(this.readyState == 4 && this.status == 200){
+                      console.log(this.response);
+                    }
+                  };
+                  xmlHttp.open("GET",'/recipe/myrecipes?key='+key,true);
+                  xmlHttp.send(null);
                 }
               };
           </script>
