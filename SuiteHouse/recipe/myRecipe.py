@@ -33,18 +33,20 @@ class MyRecipes(webapp2.RequestHandler):
 			requestedRecipe = db.get(db.Key(encoded=str(key)))
 			self.response.set_status(200,json.dumps({'key' : key, 
 													 'title' : requestedRecipe.title, 
-													 'ingredients' : json.dumps(requestedRecipe.ingredients),
-													 'instructions': json.dumps(requestedRecipe.instructions),
+													 'ingredients' : requestedRecipe.ingredients,
+													 'instructions': requestedRecipe.instructions,
 													 'rank' : requestedRecipe.rank
 													 }))
 			self.response.write(json.dumps({'key' : key, 
 													 'title' : requestedRecipe.title, 
-													 'ingredients' : json.dumps(requestedRecipe.ingredients),
-													 'instructions': json.dumps(requestedRecipe.instructions),
+													 'ingredients' : requestedRecipe.ingredients,
+													 'instructions': requestedRecipe.instructions,
 													 'rank': requestedRecipe.rank
 													 }))
 			
 		except Exception, e:
+			logging.info(e)
+			#handle the errorful key
 			if user:
 				h = house.House.findHouseIDForUser(user.nickname())
 				#Grab the user's recipes

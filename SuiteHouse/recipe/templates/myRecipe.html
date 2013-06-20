@@ -110,7 +110,41 @@
                   var xmlHttp = new XMLHttpRequest();
                   xmlHttp.onreadystatechange = function(xmlHttp){
                     if(this.readyState == 4 && this.status == 200){
-                      console.log(this.response);
+                      var recipe = JSON.parse(this.response);
+                      //Set the title
+                      var title = document.getElementsByName('title')[0];
+                      title.value = recipe.title;
+
+                      //Set the ingredients
+                      if(recipe.ingredients.length > 0){
+                        //Remove the current recipe list if we have ingredients to list
+                        document.getElementById('ingredientsList').innerHTML = '';
+                      }
+                      for (var i = 0; i < recipe.ingredients.length;  i++) {
+                        var li = document.createElement('li');
+                        var input = document.createElement('input');
+                        input.type = 'text';
+                        input.name = 'ingredients[]';
+                        input.value = recipe.ingredients[i];
+                        li.appendChild(input);
+                        document.getElementById('ingredientsList').appendChild(li);
+                      };
+
+                      //Similarally set the instructions.
+                      if(recipe.instructions.length > 0){
+                        document.getElementById('instructionsList').innerHTML = '';
+                      }
+
+                      for( var i = 0; i < recipe.instructions.length; i++){
+                        var li = document.createElement('li');
+                        var input = document.createElement('textarea');
+                        input.name = 'instructions[]';
+                        input.value = recipe.instructions[i];
+                        li.appendChild(input);
+                        document.getElementById('instructionsList').appendChild(li);
+                      }
+
+
                     }
                   };
                   xmlHttp.open("GET",'/recipe/myrecipes?key='+key,true);
