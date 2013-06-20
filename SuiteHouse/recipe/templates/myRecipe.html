@@ -27,7 +27,7 @@
         <select>
           <option ref="special">Select a Recipe</option>
         {% for recipe in recipes%}
-              <option ref="{{recipe.key()}}">{{recipe.title}}</option>
+              <option ref="{{recipe.key()}}" title={{recipe.title}} instructions={{recipe.instructions}}, ingredients={{recipe.ingredients  }}>{{recipe.title}}</option>
         {% endfor %}
         </select>
         <form action="/recipe/myrecipes" method="POST">
@@ -78,8 +78,34 @@
           <input type="reset" name="delete" value="Delete Recipe" />
           <script type="text/javascript">
             //This script binds the reset value to delete the current recipe. Relying on the select box to have the key of the ingredient stored inside a ref attribute of the option tag.
-            console.log(document.getElementsByTagName('select'));
-
+            var deleteButton = document.getElementsByName('delete')[0];
+            deleteButton.onclick = function(){
+              var select = document.getElementsByTagName('select')[0];
+              if(select.selectedIndex != 0){
+                var key = select.options[select.selectedIndex].attributes.ref.value;
+                //Submit an ajax request to the delete end point
+                if(confirm('Are you sure you want to remove this recipe? -- This cannot be undone --')){
+                  var xmlHttp = new XMLHttpRequest();
+                  xmlHttp.onreadystatechange = function(xmlHttp){
+                    if(this.readyState == 4 && this.status == 200){
+                      var opt = select.options[select.selectedIndex];
+                      opt.parentNode.remove(opt);
+                    }
+                  };
+                  xmlHttp.open('DELETE','/recipe/myrecipes?key='+ key,true);
+                  xmlHttp.send(null);
+                }
+              }    
+            };
+          </script>
+          <script type="text/javascript">
+            //Script to bind the onchange of the select to show the recipe into the paragraphs
+            var select = document.getElementsByTagName('select')[0];
+              select.onchange = function(){
+                if(select.selectedIndex != 0){
+                  //Not the default option
+                }
+              };
           </script>
           
           

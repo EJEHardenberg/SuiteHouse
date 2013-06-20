@@ -7,7 +7,7 @@ import recipe
 
 import webapp2
 import jinja2
-
+import json
 
 #Import os for finding jinja
 import os
@@ -54,7 +54,7 @@ class MyRecipes(webapp2.RequestHandler):
 				ingredients = self.request.get_all('ingredients[]')
 				instructions = self.request.get_all('instructions[]')
 				
-				userRecipe = recipe.Recipe(title=title,instructions=instructions,ingredients=ingredients,house_id=h,associated_user=user.nickname())
+				userRecipe = recipe.Recipe(title=title,instructions=instructions,ingredients=ingredients,house_id=h,associated_user=user.nickname(),rank=0)
 				userRecipe.put()
 				time.sleep(1)
 				self.redirect('/recipe/myrecipes')
@@ -64,6 +64,21 @@ class MyRecipes(webapp2.RequestHandler):
 			logging.error(e)
 			self.response.set_status(400,'Bad Request')
 			self.redirect('/recipe/myrecipes')
+
+	def delete(self):
+		"""Respond to an http delete request, this will delete whatever Item the request specifies"""
+		#Get the key to the item
+		try:
+			key = self.request.get("key")
+			item = db.get(db.Key(encoded=str(key)))
+			item.delete()
+			self.response.set_status(200,json.dumps({'key' : key}))
+			self.response.write(key)
+		except Exception, e:
+			self.response.set_status(404,json.dumps({'key' : 'Not found'}))
+			logging.error(e)
+		else:
+			pass
 
 		
 

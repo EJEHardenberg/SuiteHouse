@@ -26,6 +26,7 @@ class Recipe(db.Model):
 	ingredients = db.StringListProperty()
 	associated_user = db.StringProperty(required=True)
 	house_id = db.IntegerProperty(required=True)
+	rank = db.IntegerProperty(required=False)
 
 	@classmethod
 	def getHouseRecipes(cls,house_id):
