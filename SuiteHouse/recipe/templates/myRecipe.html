@@ -102,34 +102,32 @@
             function formIntercept(e){
               if(e.preventDefault) e.preventDefault();
               var xmlHttp = new XMLHttpRequest();
-              XMLHttpRequest.onreadystatechange = function(xmlHttp){
-                console.log(xmlHttp);
+              xmlHttp.onreadystatechange = function(xmlHttp){
                 if(this.readyState == 4 && this.status == 200){
                   //refresh the page
-                  console.log('I wanna do somethi')
                   window.location.reload();
                 }else{ /* Do something */
                   console.log(xmlHttp)
                 }
               }; 
               //Collect the data to be sent:
-                key = document.getElementsByName('update')[0].value;
-                title = document.getElementsByName('title')[0].value;
-                ingredientsDOM = document.getElementsByName('ingredients[]');
-                //build a list of just the ingredients themselves
-                ingredients = [];
-                for (var i = 0; i < ingredientsDOM.length; i++) {
-                  ingredients.push(ingredientsDOM[i].value);
-                }
-                //build up a list of the instructons as well.
-                instructionsDOM = document.getElementsByName('instructions[]');
-                instructions = [];
-                for(var i= 0; i < instructionsDOM.length; i++){
-                  instructions.push(instructionsDOM[i].value);
-                }
-                //Now send that to the server in glorious json form
-                xmlHttp.open("PUT",'/recipe/myrecipes',true);
-                xmlHttp.send(JSON.stringify({'key' : key, 'ingredients' : ingredients, 'instructions' : instructions, 'title' : title}));
+              key = document.getElementsByName('update')[0].value;
+              title = document.getElementsByName('title')[0].value;
+              ingredientsDOM = document.getElementsByName('ingredients[]');
+              //build a list of just the ingredients themselves
+              ingredients = [];
+              for (var i = 0; i < ingredientsDOM.length; i++) {
+                ingredients.push(ingredientsDOM[i].value);
+              }
+              //build up a list of the instructons as well.
+              instructionsDOM = document.getElementsByName('instructions[]');
+              instructions = [];
+              for(var i= 0; i < instructionsDOM.length; i++){
+                instructions.push(instructionsDOM[i].value);
+              }
+              //Now send that to the server in glorious json form
+              xmlHttp.open("PUT",'/recipe/myrecipes',true);
+              xmlHttp.send(JSON.stringify({'key' : key, 'ingredients' : ingredients, 'instructions' : instructions, 'title' : title}));
               return false;
             }
 
