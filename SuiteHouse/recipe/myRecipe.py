@@ -24,7 +24,7 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 class MyRecipes(webapp2.RequestHandler):
 
 	def get(self):
-		user = users.get_current_user()		
+		user = users.get_current_user()
 
 		try:
 			#If there's a key then that means we're responding to an ajax request and should send back json of the recipe
@@ -101,5 +101,32 @@ class MyRecipes(webapp2.RequestHandler):
 		else:
 			pass
 
+	def put(self):
+		"""Respond to an http put request and update a given recipe""" 
+		try:
+
+			information = json.loads(str(self.request.body))
+			key = information['key']
+			newTitle = information['title']
+			newIngredients = information['ingredients']
+			newInstructions = information['instructions']
+
+			item = db.get(db.Key(encoded=str(key)))
+
+			item.title = newTitle
+			item.ingredients = newIngredients
+			item.instructions = newInstructions
+
+			item.put()
+			time.sleep(1)
+			self.response.out.set_status(200,'Resource Updated')
+			self.response.out.write('Resource Updated')
 		
+
+		except Exception, e:
+			self.response.set_status(404,json.dumps({'message' : e}))
+			logging.error(e)
+		
+		self.response.out.set_status(200,'Resource Updated')
+		self.response.out.write('200')
 
