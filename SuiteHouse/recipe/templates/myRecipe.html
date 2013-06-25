@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% autoescape true %}
+{% autoescape false %}
 <html>
   <head>
     {% include "globalStyles.html" %}
@@ -27,10 +27,10 @@
         <select>
           <option ref="special">Select a Recipe</option>
         {% for recipe in recipes%}
-              <option ref="{{recipe.key()}}">{{recipe.title}}</option>
+              <option ref="{{recipe.key()}}" >{{recipe.title}}</option>
         {% endfor %}
         </select>
-        <form action="/recipe/myrecipes" method="POST">
+        <form action="/recipe/myrecipes" method="POST" id="recipeForm">
           <div id="recipeTitle">
             <h3>Recipe Title</h3>
             <input type="text" name="title"/>
@@ -44,6 +44,17 @@
             </ul>
             <a id="moreIngredients">Add Ingredient</a>
           </div>
+          <script type="text/javascript">
+            //This piece of script handles adding more input's to the ingredients list
+            document.getElementById('moreIngredients').onclick = function(){
+              var li = document.createElement('li');
+              var input = document.createElement('input');
+              input.type = 'text';
+              input.name = 'ingredients[]';
+              li.appendChild(input);
+              document.getElementById('ingredientsList').appendChild(li);
+            };
+          </script>
           <div id="recipeInstructions">
             <h3>Instructions</h3>
             <ul id="instructionsList">
@@ -52,9 +63,159 @@
             </ul>
             <a id="moreInstructions" >Add Paragraph</a>
           </div>
+          <script type="text/javascript">
+            //This piece of script handles adding more textarea's to the instructions list
+            document.getElementById('moreInstructions').onclick = function(){
+              var li = document.createElement('li');
+              var input = document.createElement('textarea');
+              input.name = 'instructions[]';
+              li.appendChild(input);
+              document.getElementById('instructionsList').appendChild(li);
+            };
+          </script>
           
-          <input type="submit" value="Submit Recipe"/>
+          <input type="submit" name="submit_update" value="Submit Recipe"/>
           <input type="reset" name="delete" value="Delete Recipe" />
+          <script type="text/javascript">
+            //This script binds the reset value to delete the current recipe. Relying on the select box to have the key of the ingredient stored inside a ref attribute of the option tag.
+            var deleteButton = document.getElementsByName('delete')[0];
+            deleteButton.onclick = function(){
+              var select = document.getElementsByTagName('select')[0];
+              if(select.selectedIndex != 0){
+                var key = select.options[select.selectedIndex].attributes.ref.value;
+                //Submit an ajax request to the delete end point
+                if(confirm('Are you sure you want to remove this recipe? -- This cannot be undone --')){
+                  var xmlHttp = new XMLHttpRequest();
+                  xmlHttp.onreadystatechange = function(xmlHttp){
+                    if(this.readyState == 4 && this.status == 200){
+                      var opt = select.options[select.selectedIndex];
+                      opt.parentNode.remove(opt);
+                    }
+                  };
+                  xmlHttp.open('DELETE','/recipe/myrecipes?key='+ key,true);
+                  xmlHttp.send(null);
+                }
+              }    
+            };
+          </script>
+          <script type="text/javascript">
+            function formIntercept(e){
+              if(e.preventDefault) e.preventDefault();
+              var xmlHttp = new XMLHttpRequest();
+              xmlHttp.onreadystatechange = function(xmlHttp){
+                if(this.readyState == 4 && this.status == 200){
+                  //refresh the page
+                  window.location.reload();
+                }else{ /* Do something */
+                  console.log(xmlHttp)
+                }
+              }; 
+              //Collect the data to be sent:
+              key = document.getElementsByName('update')[0].value;
+              title = document.getElementsByName('title')[0].value;
+              ingredientsDOM = document.getElementsByName('ingredients[]');
+              //build a list of just the ingredients themselves
+              ingredients = [];
+              for (var i = 0; i < ingredientsDOM.length; i++) {
+                ingredients.push(ingredientsDOM[i].value);
+              }
+              //build up a list of the instructons as well.
+              instructionsDOM = document.getElementsByName('instructions[]');
+              instructions = [];
+              for(var i= 0; i < instructionsDOM.length; i++){
+                instructions.push(instructionsDOM[i].value);
+              }
+              //Now send that to the server in glorious json form
+              xmlHttp.open("PUT",'/recipe/myrecipes',true);
+              xmlHttp.send(JSON.stringify({'key' : key, 'ingredients' : ingredients, 'instructions' : instructions, 'title' : title}));
+              return false;
+            }
+
+            //Script to bind the onchange of the select to show the recipe into the paragraphs
+            var select = document.getElementsByTagName('select')[0];
+              select.onchange = function(){
+                if(select.selectedIndex != 0){
+                  //Not the default option, which means it's a recipe
+                  var opt = select.options[select.selectedIndex];
+                  var key =opt.attributes.ref.value;
+                  //Submit an ajax request for the recipe information to load.
+                  var xmlHttp = new XMLHttpRequest();
+                  xmlHttp.onreadystatechange = function(xmlHttp){
+                    if(this.readyState == 4 && this.status == 200){
+                      var recipe = JSON.parse(this.response);
+                      //Set the title
+                      var title = document.getElementsByName('title')[0];
+                      title.value = recipe.title;
+
+                      //Set the ingredients
+                      if(recipe.ingredients.length > 0){
+                        //Remove the current recipe list if we have ingredients to list
+                        document.getElementById('ingredientsList').innerHTML = '';
+                      }
+                      for (var i = 0; i < recipe.ingredients.length;  i++) {
+                        var li = document.createElement('li');
+                        var input = document.createElement('input');
+                        input.type = 'text';
+                        input.name = 'ingredients[]';
+                        input.value = recipe.ingredients[i];
+                        li.appendChild(input);
+                        document.getElementById('ingredientsList').appendChild(li);
+                      };
+
+                      //Similarally set the instructions.
+                      if(recipe.instructions.length > 0){
+                        document.getElementById('instructionsList').innerHTML = '';
+                      }
+
+                      for( var i = 0; i < recipe.instructions.length; i++){
+                        var li = document.createElement('li');
+                        var input = document.createElement('textarea');
+                        input.name = 'instructions[]';
+                        input.value = recipe.instructions[i];
+                        li.appendChild(input);
+                        document.getElementById('instructionsList').appendChild(li);
+                      }
+
+                      //To enable updating we need to send the key along with the posted information
+                      var button = document.getElementsByName('submit_update')[0];
+                      button.value = "Update Recipe";
+                      
+                      var hiddenField=  document.createElement('input');
+                      hiddenField.type ='hidden';
+                      hiddenField.value = recipe.key;
+                      hiddenField.name = 'update';
+                      document.getElementById('recipeTitle').appendChild(hiddenField);
+
+                      var theForm =document.getElementById('recipeForm');
+                      if( theForm.attachEvent){
+                        theForm.attachEvent("submit",formIntercept)
+                      }else{
+                        theForm.addEventListener("submit",formIntercept);
+                      }
+
+
+                    }
+                  };
+                  xmlHttp.open("GET",'/recipe/myrecipes?key='+key,true);
+                  xmlHttp.send(null);
+                }else{
+                  //We have selected the default and should make the form submission function again.
+                  var button = document.getElementsByName('submit_update')[0];
+                  button.value = "Submit Recipe";
+                  var hiddens = document.getElementsByName('update');
+                  console.log(hiddens);
+                  for (var i = hiddens.length - 1; i >= 0; i--) {
+                    hiddens[i].value = "submit"
+                  };
+                  var theForm = document.getElementById('recipeForm');
+                  if(theForm.attachEvent){
+                    theForm.detachEvent('submit',formIntercept);
+                  }else{
+                    theForm.removeEventListener("submit",formIntercept);
+                  }
+                }
+              };
+          </script>
           
           
         </form>
